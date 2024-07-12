@@ -18,9 +18,9 @@ const getPostList = (req, res) => {
 
 const getPostContent = (req, res) => {
     const query = `
-    SELECT post.*, post_content.*
+    SELECT post.*, post_content.* 
     FROM coursing.post 
-    LEFT JOIN coursing.post_content ON post.post_id = post_content.post_id
+    LEFT JOIN coursing.post_content ON post.post_id = post_content._post_id
     ;`;
     db.query(query, (err, result)=>{
         if (err) {
