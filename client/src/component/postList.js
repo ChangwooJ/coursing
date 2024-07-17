@@ -41,7 +41,7 @@ const PostList = () => {
                                                 style={{ width: '20%', height: '40vh' }}
                                             />
                                             <div style={{ width: '30%', height: '400px' }}>
-                                                <Maps id={`${content.id}`} lat={content.lat} lon={content.lon} />
+                                                <Maps id={`${content.id}`} address={content.address} />
                                             </div>
                                         </div>
                                     </SwiperSlide>
