@@ -1,2 +1,3 @@
 export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_CONTENTS = 'FETCH_CONTENTS';
+export const FETCH_LISTS = 'FETCH_LISTS';
