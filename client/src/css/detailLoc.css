@@ -1,0 +1,9 @@
+.detail_comp {
+    position: absolute;
+    z-index: 1;
+    width: 20%;
+    height: 100%;
+    left: 20%;
+    background-color: white;
+    border-left: 3px solid whitesmoke;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import "../css/list_map.css";
 
 const { kakao } = window;
 
@@ -78,10 +79,11 @@ const Maps = ({ id, address }) => {
             // 마커 위에 인포윈도우를 표시합니다
             infowindow.open(map, marker);
 
+            map.setZoomable(false);
         }
     }
 
-    return <div id={id} ref={mapContainerRef} style={{ width: '100%', height: '100%' }}></div>;  // ref를 div에 설정
+    return <div className="main_map" ref={mapContainerRef} ></div>;  // ref를 div에 설정
 };
 
 export default Maps;
