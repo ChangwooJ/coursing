@@ -42,7 +42,8 @@ const PlanInfo = ({setPositions}) => {
                             latlng: new kakao.maps.LatLng(document.y, document.x),
                             name: document.road_address ? document.road_address.building_name : '',
                             title: list.user_content_title,
-                            memo: list.memo
+                            memo: list.memo,
+                            list_id: list.list_id
                         };
                     }
                 } catch (error) {

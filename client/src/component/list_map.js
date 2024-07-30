@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../css/list_map.css";
 import DetailLoc from "./detailLoc";
+import "../css/list_map.css";
 
 const { kakao } = window;
 
@@ -10,6 +10,7 @@ const ListMap = ({ positions }) => {
     const [selPosition, setSelPosition] = useState(null);
     const [button, setButton] = useState(">");
     const [temp, setTemp] = useState(null);
+    const [btPosition, setBtPosition] = useState('left');
 
     useEffect(() => {
         if (positions.length > 0) {
@@ -20,7 +21,11 @@ const ListMap = ({ positions }) => {
     useEffect(()=>{
         if(selPosition === null){
             setButton(">");
-        } else setButton("<");
+            setBtPosition('left');
+        } else {
+            setButton("<");
+            setBtPosition('right');
+        }
     })
 
     const initializeMap = (positions) => {
@@ -74,7 +79,14 @@ const ListMap = ({ positions }) => {
             </div>
             {selPosition && <DetailLoc position={selPosition} />}
             <div className="bt_Wrap">
-                <button className="close_bt" onClick={()=>transition()}>{button}</button>
+                <button 
+                className="close_bt" 
+                onClick={()=>transition()} 
+                style={{
+                    [btPosition]: selPosition === null ? '20%' : '40%'
+                }}>
+                    {button}
+                </button>
             </div>
         </React.Fragment>
     );

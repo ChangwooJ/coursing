@@ -3,7 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, fetchPosts } from "../redux/actions/postActions";
 import Maps from "../component/maps";
-import AddPlan from "./addPlan";
+import PlanBanner from "./banner";
+import { AddPlan } from "./handlePlan";
 import '../css/postList.css';
 import 'swiper/css';
 
@@ -17,16 +18,17 @@ const PostList = ({ positions }) => {
         dispatch(fetchContents());
     }, [dispatch]);
 
+    const handleAddPlan = async ({content}) => {
+        try {
+            await AddPlan({content});
+        } catch (error) {
+            alert('Failed to add plan.');
+        }
+    };
+
     return (
         <React.Fragment>
-            <div className="banner_wrap">
-                {positions.length > 0 && (<p>{positions[0].title}</p>)}
-                {positions.map((position, index) => (
-                    <div key={index}>
-                        <p>{position.name}</p>
-                    </div>
-                ))}
-            </div>
+            <PlanBanner positions={positions} />
             <div className="main_wrap">
                 {posts.map((post) => (
                     <div key={post.post_id}>
@@ -55,7 +57,7 @@ const PostList = ({ positions }) => {
                                                 <Maps id={`${content.id}`} address={content.address} />
                                             </div>
                                         </div>
-                                        <button className="add_plan" onClick={<AddPlan content={content} />}>추가하기</button>
+                                        <button className="add_plan" onClick={()=> handleAddPlan({content})}>추가하기</button>
                                     </SwiperSlide>
                                 ))
                             }
