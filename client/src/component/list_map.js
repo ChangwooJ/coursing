@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import DetailLoc from "./detailLoc";
+import Search from "./search";
 import "../css/list_map.css";
 
 const { kakao } = window;
@@ -11,6 +12,8 @@ const ListMap = ({ positions }) => {
     const [button, setButton] = useState(">");
     const [temp, setTemp] = useState(null);
     const [btPosition, setBtPosition] = useState('left');
+    const [searchPosition, setSearchPosition] = useState(null);
+    const [loc, setLoc] = useState([]);
 
     useEffect(() => {
         if (positions.length > 0) {
@@ -18,8 +21,8 @@ const ListMap = ({ positions }) => {
         }
     }, [positions]);
 
-    useEffect(()=>{
-        if(selPosition === null){
+    useEffect(() => {
+        if (selPosition === null) {
             setButton(">");
             setBtPosition('left');
         } else {
@@ -27,6 +30,12 @@ const ListMap = ({ positions }) => {
             setBtPosition('right');
         }
     })
+
+    useEffect(() => {
+        if (searchPosition !== null) {
+            moveSearchPosition();
+        }
+    }, [searchPosition]);
 
     const initializeMap = (positions) => {
         if (mapContainerRef.current && positions.length > 0) {
@@ -49,14 +58,14 @@ const ListMap = ({ positions }) => {
         }
     };
 
-    const viewPlan = ( index ) => {
+    const viewPlan = (index) => {
         map.panTo(positions[index].latlng);
         //panTo에 option을 줄 수 있음. 화면 이동시 해당 요소로의 확대(level의 변경)가 필요해보임
         setSelPosition(positions[index]);
     }
 
     const transition = () => {
-        if(selPosition !== null){
+        if (selPosition !== null) {
             setTemp(selPosition);
             setSelPosition(null);
         } else {
@@ -64,10 +73,37 @@ const ListMap = ({ positions }) => {
         }
     }
 
+    const moveSearchPosition = () => {
+        map.panTo(searchPosition);
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                position: searchPosition,
+                clickable: true
+            });
+
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(map);
+
+        var iwContent = `<div>${loc.place_name}</div>`, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+        // 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable
+        });
+
+        // 마커 위에 인포윈도우를 표시합니다
+        infowindow.open(map, marker);
+
+    }
+
     return (
         <React.Fragment>
             <div className="map" ref={mapContainerRef}></div>
             <div className="list_wrap">
+                <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
                 {positions.length > 0 && (<p>{positions[0].title}</p>)}
                 {positions.map((position, index) => (
                     <button key={index} onClick={() => viewPlan(index)}>
@@ -79,12 +115,12 @@ const ListMap = ({ positions }) => {
             </div>
             {selPosition && <DetailLoc position={selPosition} />}
             <div className="bt_Wrap">
-                <button 
-                className="close_bt" 
-                onClick={()=>transition()} 
-                style={{
-                    [btPosition]: selPosition === null ? '20%' : '40%'
-                }}>
+                <button
+                    className="close_bt"
+                    onClick={() => transition()}
+                    style={{
+                        [btPosition]: selPosition === null ? '20%' : '40%'
+                    }}>
                     {button}
                 </button>
             </div>

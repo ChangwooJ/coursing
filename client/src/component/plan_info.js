@@ -38,6 +38,7 @@ const PlanInfo = ({setPositions}) => {
 
                     if (loc_res.data.documents.length > 0) {
                         const document = loc_res.data.documents[0];
+                        console.log(document);
                         return { 
                             latlng: new kakao.maps.LatLng(document.y, document.x),
                             name: document.road_address ? document.road_address.building_name : '',
