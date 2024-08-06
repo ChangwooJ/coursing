@@ -76,25 +76,23 @@ const ListMap = ({ positions }) => {
     const moveSearchPosition = () => {
         map.panTo(searchPosition);
 
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: searchPosition,
-                clickable: true
-            });
+        // 마커 생성
+        var marker = new kakao.maps.Marker({
+            position: searchPosition,
+            clickable: true
+        });
 
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
+        marker.setMap(map);
 
-        var iwContent = `<div>${loc.place_name}</div>`, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+        var iwContent = `<div>${loc.place_name}</div>`,
+            iwRemoveable = true;
 
-        // 인포윈도우를 생성합니다
+        // 인포윈도우 생성
         var infowindow = new kakao.maps.InfoWindow({
             content: iwContent,
             removable: iwRemoveable
         });
 
-        // 마커 위에 인포윈도우를 표시합니다
         infowindow.open(map, marker);
 
     }
