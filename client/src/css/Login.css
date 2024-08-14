@@ -1,0 +1,45 @@
+.login_wrap {
+    text-align: center;
+    margin-left: 40%;
+    margin-top: 10%;
+    width: 20%;
+}
+
+
+.login_wrap {
+    .login {
+        margin-bottom: 10px;
+        width: 100%;
+        height: 30px;
+        text-indent: 10px;
+    }
+
+    .id {
+        margin-top: 50px;
+    }
+}
+
+.login_wrap .login_bt_wrap {
+    .bt {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 5px;
+        background-color: rgb(88, 168, 253);
+        border: none;
+        color: white;
+        font-weight: 550;
+    }
+}
+
+.login_wrap .find_my_account {
+    display: flex;
+    a {
+        text-decoration: none;
+        color: black;
+        font-size: 14px;
+    }
+    .separator {
+        border-left: 1px solid black;
+        margin: 0 5px;
+    }
+}

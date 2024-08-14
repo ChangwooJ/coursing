@@ -8,12 +8,16 @@ passport.use(new LocalStrategy({
 },
     function (username, password, done) {
         const query = `
-        SELECT * FROM coursing.user 
+        SELECT 
+        user.*, user_info.* 
+        FROM coursing.user 
+        LEFT JOIN coursing.user_info ON user.id = user_info.user_id 
         WHERE username = ?;
-      `;
+        `;
 
         db.query(query, [username], (err, results) => {
             if (err) {
+                console.error('Database query error:', err);
                 return done(err);
             }
             //쿼리문을 이용해 반환값이 없으면 일치하는 아이디가 없는 것

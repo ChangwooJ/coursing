@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import "../css/Login.css";
+
 const Login = () => {
     const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
@@ -32,8 +34,8 @@ const Login = () => {
 
     return(
         <div className="login_wrap">
-            <h2>로그인</h2>
             <form onSubmit={checkUser}>
+                <h2>로그인</h2>
                 <div className="login_form">
                     <p><input
                         className="login id"
@@ -50,14 +52,14 @@ const Login = () => {
                         onChange={change}
                     /></p>
                 </div>
+                <div className="login_bt_wrap">
+                    <input className="bt login_bt" type="submit" value="로그인" />
+                    <input className="bt sign_up" type="button" value="회원가입" />
+                </div>
                 <div className="find_my_account">
                     <a href="/find_my/id">아이디 찾기</a>
                     <div className="separator"></div>
                     <a href="/find_my/pw">비밀번호 찾기</a>
-                </div>
-                <div className="login_bt_wrap">
-                    <input className="login_bt" type="submit" value="로그인" />
-                    <input className="sign_up" type="button" value="회원가입" />
                 </div>
             </form>
         </div>

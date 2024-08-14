@@ -7,6 +7,7 @@ import PlanBanner from "./banner";
 import { AddPlan } from "./handlePlan";
 import '../css/postList.css';
 import 'swiper/css';
+import 'swiper/css/navigation';
 
 const PostList = ({ positions }) => {
     const dispatch = useDispatch();
@@ -31,17 +32,19 @@ const PostList = ({ positions }) => {
             <PlanBanner positions={positions} />
             <div className="main_wrap">
                 {posts.map((post) => (
-                    <div key={post.post_id}>
+                    <div key={post.post_id} className="post_wrap">
                         <h3>{post.title}</h3>
                         <p>{post.user_name}</p>
-                        <button className="swiper-prev swiper_bt">{"<"}</button>
-
+                        <div className="swiper-button-prev swiper_bt"></div>
                         <Swiper
                             spaceBetween={20}
                             slidesPerView={1}
                             navigation={{
-                                prevEl: ".swiper-prev",
-                                nextEl: ".swiper-next"
+                                prevEl: ".swiper-button-prev",
+                                nextEl: ".swiper-button-next"
+                            }}
+                            pagination={{
+                                type: "bullets"
                             }}
                         >
                             {contents.filter(content => content.post_id === post.post_id)
@@ -49,11 +52,13 @@ const PostList = ({ positions }) => {
                                 .map(content => (
                                     <SwiperSlide key={content.id}>
                                         <div className="silde_frame">
+                                            <div className="post_content">
+                                                {content.content}
+                                            </div>
                                             <img
                                                 src={content.img_src}
-                                                style={{ width: '30%', height: '60vh' }}
                                             />
-                                            <div className="map_wrap" style={{ border: '1px solid red', width: '50%', height: '400px' }}>
+                                            <div className="map_wrap">
                                                 <Maps id={`${content.id}`} address={content.address} />
                                             </div>
                                         </div>
@@ -62,7 +67,7 @@ const PostList = ({ positions }) => {
                                 ))
                             }
                         </Swiper>
-                        <button className="swiper-next swiper_bt">{">"}</button>
+                        <div className="swiper-button-next swiper_bt"></div>
                     </div>
                 ))}
             </div>

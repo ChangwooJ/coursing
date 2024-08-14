@@ -23,6 +23,9 @@ const Main = () => {
 
     return (
         <React.Fragment>
+            <div className="logged_wrap">
+
+            </div>
             <PlanInfo setPositions={setPositions} />
             <div>
                 <PostList positions={positions} />

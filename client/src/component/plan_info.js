@@ -38,13 +38,16 @@ const PlanInfo = ({setPositions}) => {
 
                     if (loc_res.data.documents.length > 0) {
                         const document = loc_res.data.documents[0];
-                        console.log(document);
+                        //console.log(list);
                         return { 
                             latlng: new kakao.maps.LatLng(document.y, document.x),
                             name: document.road_address ? document.road_address.building_name : '',
                             title: list.user_content_title,
                             memo: list.memo,
-                            list_id: list.list_id
+                            list_id: list.list_id,
+                            category: list.cate_img_src,
+                            start_time: list.start_time,
+                            end_time: list.end_time
                         };
                     }
                 } catch (error) {

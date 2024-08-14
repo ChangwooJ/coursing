@@ -31,5 +31,13 @@ const postLogout = (req, res) => {
     });
 };
 
+const getLogged = (req, res) => {
+    if (req.isAuthenticated()) {
+      res.status(200).json({ isAuthenticated: true, user: req.user });
+    } else {
+      res.status(401).json({ isAuthenticated: false });
+    }
+  }
 
-module.exports = {postLogin, postLogout};
+
+module.exports = {postLogin, postLogout, getLogged};

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {getPostList, getPostContent} = require('../handlers/postHandler');
 const {getList, postList, deleteList} = require('../handlers/listHandler');
-const {postLogin, postLogout} = require('../handlers/authHandler');
+const {postLogin, postLogout, getLogged} = require('../handlers/authHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -14,6 +14,6 @@ router.delete('/delete_plan', deleteList);
 
 router.post('/login', postLogin);
 router.post('/logout', postLogout);
- 
+router.get('/status', getLogged);
 
 module.exports = router;
