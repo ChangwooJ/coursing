@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, fetchPosts } from "../redux/actions/postActions";
+import { AuthContext } from '../context/AuthContext';
 import Maps from "../component/maps";
 import PlanBanner from "./banner";
+import Header from "./header";
 import { AddPlan } from "./handlePlan";
 import '../css/postList.css';
 import 'swiper/css';
@@ -13,11 +15,14 @@ const PostList = ({ positions }) => {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
     const contents = useSelector(state => state.contents.contents);
+    const { isAuthenticated, loading, userInfo } = useContext(AuthContext);
 
     useEffect(() => {
-        dispatch(fetchPosts());
-        dispatch(fetchContents());
-    }, [dispatch]);
+        if (!loading) {
+            dispatch(fetchPosts());
+            dispatch(fetchContents());
+        }
+    }, [dispatch, loading]);
 
     const handleAddPlan = async ({content}) => {
         try {
@@ -29,6 +34,7 @@ const PostList = ({ positions }) => {
 
     return (
         <React.Fragment>
+            <Header isAuthenticated={isAuthenticated} userInfo={userInfo}/>
             <PlanBanner positions={positions} />
             <div className="main_wrap">
                 {posts.map((post) => (

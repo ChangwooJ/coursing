@@ -1,4 +1,5 @@
 const passport = require('../passport/passport-config');
+const db = require('./DBinfo');
 
 const postLogin = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
@@ -33,11 +34,28 @@ const postLogout = (req, res) => {
 
 const getLogged = (req, res) => {
     if (req.isAuthenticated()) {
-      res.status(200).json({ isAuthenticated: true, user: req.user });
+        const query = `
+        SELECT 
+        user_info.* 
+        FROM coursing.user 
+        LEFT JOIN coursing.user_info ON user.id = user_info.user_id 
+        WHERE user.username = ?
+        ;`;
+
+        const params = req.user.username;
+
+        db.query(query, params,(err, result) => {
+            if (err) {
+                res.status(500).send(err);
+                console.log('X');
+            } else {
+                res.status(200).json({ isAuthenticated: true, user: req.user, user_info: result });
+            }
+        })
     } else {
-      res.status(401).json({ isAuthenticated: false });
+        res.status(401).json({ isAuthenticated: false });
     }
-  }
+}
 
 
-module.exports = {postLogin, postLogout, getLogged};
+module.exports = { postLogin, postLogout, getLogged };

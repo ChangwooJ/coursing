@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
+import { AuthContext } from '../context/AuthContext';
 import DetailLoc from "./detailLoc";
 import Search from "./search";
+import Header from "./header";
+import PlanBanner from "./banner";
 import "../css/list_map.css";
 
 const { kakao } = window;
@@ -14,6 +17,7 @@ const ListMap = ({ positions }) => {
     const [btPosition, setBtPosition] = useState('left');
     const [searchPosition, setSearchPosition] = useState(null);
     const [loc, setLoc] = useState([]);
+    const { isAuthenticated, userInfo } = useContext(AuthContext);
 
     useEffect(() => {
         if (positions.length > 0) {
@@ -99,6 +103,8 @@ const ListMap = ({ positions }) => {
 
     return (
         <React.Fragment>
+            <Header isAuthenticated={isAuthenticated} userInfo={userInfo}/>
+            <PlanBanner positions={positions} />
             <div className="map" ref={mapContainerRef}></div>
             <div className="list_wrap">
                 <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />

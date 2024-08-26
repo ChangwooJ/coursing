@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useContext } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLists } from "../redux/actions/listActions";
+import { AuthContext } from '../context/AuthContext';
 
 const { kakao } = window;
 
@@ -9,9 +10,16 @@ const PlanInfo = ({setPositions}) => {
     const api_key = process.env.REACT_APP_API_KEY;
     const dispatch = useDispatch();
     const allLists = useSelector((state) => state.lists.lists);
+    const { isAuthenticated, userInfo } = useContext(AuthContext);
+
     const lists = useMemo(()=>{     //useEffect에 객체 전달로 인한 리랜더링 방지
-        return allLists.filter(list => list.user_content_id === 1);
-    }, [allLists]);
+        if(isAuthenticated && userInfo){
+            return allLists.filter(list => list.user_content_id === userInfo[0].user_id);
+        }
+        return [];
+    }, [allLists, isAuthenticated, userInfo]);
+
+    console.log(allLists);
 
     useEffect(() => {
         dispatch(fetchLists());
@@ -36,7 +44,7 @@ const PlanInfo = ({setPositions}) => {
                         },
                     });
 
-                    if (loc_res.data.documents.length > 0) {
+                    if (loc_res.data && loc_res.data.documents.length > 0) {
                         const document = loc_res.data.documents[0];
                         //console.log(list);
                         return { 
