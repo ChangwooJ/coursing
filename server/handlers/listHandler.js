@@ -8,7 +8,7 @@ const getList = (req, res) => {
     LEFT JOIN coursing.user_content ON user.id = user_content._user_id 
     LEFT JOIN coursing.user_content_list ON user_content.user_content_id = user_content_list.content_id 
     LEFT JOIN coursing.category ON user_content_list.category = category.category_id 
-    ORDER BY list_id ASC;`;
+    ORDER BY user_content_id ASC, start_time ASC;`;
     db.query(query, (err, result)=>{
         if (err) {
             res.status(500).send(err);
@@ -57,4 +57,19 @@ const deleteList = (req, res) => {
     });
 }
 
-module.exports = { getList, postList, deleteList };
+const getTitle = (req, res) => {
+    const query = `
+    SELECT
+    user_content.* 
+    FROM coursing.user_content
+    ;`;
+    db.query(query, (err, result)=>{
+        if (err) {
+            res.status(500).send(err);
+            console.log('X');
+        } else {
+            res.send(result);
+        }
+    })
+}
+module.exports = { getList, postList, deleteList, getTitle };

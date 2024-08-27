@@ -79,7 +79,12 @@ const Header = ({ isAuthenticated, userInfo }) => {
                     >
                         <img src="img/내 일정.png"/>
                     </button>
-                    <button className="category"></button>
+                    <button 
+                        className={menu === '/chat' ? 'active' : ''} 
+                        onClick={() => handleMenuClick('/chat')}
+                    >
+                        <img src="img/말풍선.png"/>
+                    </button>
                     <button 
                         className={menu === '/my_page' ? 'active' : ''}  
                         onClick={() => handleMenuClick('/my_page')}

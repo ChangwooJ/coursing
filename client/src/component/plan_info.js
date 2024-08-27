@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const { kakao } = window;
 
-const PlanInfo = ({setPositions}) => {
+const PlanInfo = ({setPositions, contentId}) => {
     const api_key = process.env.REACT_APP_API_KEY;
     const dispatch = useDispatch();
     const allLists = useSelector((state) => state.lists.lists);
@@ -14,12 +14,10 @@ const PlanInfo = ({setPositions}) => {
 
     const lists = useMemo(()=>{     //useEffect에 객체 전달로 인한 리랜더링 방지
         if(isAuthenticated && userInfo){
-            return allLists.filter(list => list.user_content_id === userInfo[0].user_id);
+            return allLists.filter(list => list.user_content_id === contentId);
         }
         return [];
-    }, [allLists, isAuthenticated, userInfo]);
-
-    console.log(allLists);
+    }, [allLists, isAuthenticated, userInfo, contentId]);
 
     useEffect(() => {
         dispatch(fetchLists());
@@ -29,7 +27,7 @@ const PlanInfo = ({setPositions}) => {
         if (lists.length > 0) {
             fetchLocations(lists);
         }
-    }, [lists]);
+    }, [lists, contentId]);
 
     const fetchLocations = async (lists) => {
         const locationsPromises = lists.map(async (list) => {
@@ -46,7 +44,6 @@ const PlanInfo = ({setPositions}) => {
 
                     if (loc_res.data && loc_res.data.documents.length > 0) {
                         const document = loc_res.data.documents[0];
-                        //console.log(list);
                         return { 
                             latlng: new kakao.maps.LatLng(document.y, document.x),
                             name: document.road_address ? document.road_address.building_name : '',

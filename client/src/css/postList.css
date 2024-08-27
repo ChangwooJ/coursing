@@ -57,13 +57,41 @@
 }
 
 .banner_title {
+    width: 100%;
     line-height: 40px;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 550;
     border: 0.5px solid gray;
+    border-radius: 5px;
+    background-color: white;
     height: 40px;
     margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.banner_title.clicked {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid black;
+}
+
+.down {
+    position: absolute;
+    right: 20px;
+    font-size: 13px;
+}
+
+.title_li {   
+    z-index: 3;
+    width: 100%;
+    font-size: 16px;
+    list-style-type: none;
+    font-weight: 500;
+    line-height: 30px;
+    background-color: white;
 }
 
 .each_hour {
