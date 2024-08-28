@@ -22,7 +22,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
         }
     }, [isAuthenticated]);
 
-    const handleLoggedBanner = () => {
+    const handleProfileImg = () => {
         if (userInfo) {
             if (userInfo.profile_img == null) {
                 return (
@@ -56,7 +56,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
         <React.Fragment>
             <div className="my_banner_wrap">
                 <div className="my_banner">
-                    {handleLoggedBanner()}
+                    {handleProfileImg()}
                     {userInfo && (<div className="my_name">
                         {userInfo[0].name} 님
                     </div>)}

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../css/search.css";
 
 const { kakao } = window;
 
@@ -38,7 +37,7 @@ const Search = ({ setLoc, setSearchPosition }) => {
                 type="text" placeholder="장소 검색" 
                 value={text} onChange={handleChange}
                 />
-                <button type="submit">검색</button>
+                <button type="submit"><img src="img/검색.png"/></button>
             </form>
         </React.Fragment>
     )

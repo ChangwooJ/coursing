@@ -1,23 +1,18 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import { AuthContext } from '../context/AuthContext';
-import DetailLoc from "./detailLoc";
 import Search from "./search";
-import Header from "./header";
-import PlanBanner from "./banner";
 import "../css/list_map.css";
+import { PositionsContext } from '../context/PositionsContext';
+import { LocationContext } from '../context/LocationContext';
 
 const { kakao } = window;
 
-const ListMap = ({ positions }) => {
+const ListMap = () => {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState(null);
-    const [selPosition, setSelPosition] = useState(null);
-    const [button, setButton] = useState(">");
-    const [temp, setTemp] = useState(null);
-    const [btPosition, setBtPosition] = useState('left');
     const [searchPosition, setSearchPosition] = useState(null);
     const [loc, setLoc] = useState([]);
-    const { isAuthenticated, userInfo } = useContext(AuthContext);
+    const { positions } = useContext(PositionsContext);
+    const { location } = useContext(LocationContext);
 
     useEffect(() => {
         if (positions.length > 0) {
@@ -26,17 +21,13 @@ const ListMap = ({ positions }) => {
     }, [positions]);
 
     useEffect(() => {
-        if (selPosition === null) {
-            setButton(">");
-            setBtPosition('left');
-        } else {
-            setButton("<");
-            setBtPosition('right');
+        if(location !== null && map) {
+            movePlanPosition();
         }
-    })
+    }, [location]);
 
     useEffect(() => {
-        if (searchPosition !== null) {
+        if (searchPosition !== null && map) {
             moveSearchPosition();
         }
     }, [searchPosition]);
@@ -62,19 +53,8 @@ const ListMap = ({ positions }) => {
         }
     };
 
-    const viewPlan = (index) => {
-        map.panTo(positions[index].latlng);
-        //panTo에 option을 줄 수 있음. 화면 이동시 해당 요소로의 확대(level의 변경)가 필요해보임
-        setSelPosition(positions[index]);
-    }
-
-    const transition = () => {
-        if (selPosition !== null) {
-            setTemp(selPosition);
-            setSelPosition(null);
-        } else {
-            setSelPosition(temp);
-        }
+    const movePlanPosition = () => {
+        map.panTo(location);
     }
 
     const moveSearchPosition = () => {
@@ -103,31 +83,8 @@ const ListMap = ({ positions }) => {
 
     return (
         <React.Fragment>
-            <Header isAuthenticated={isAuthenticated} userInfo={userInfo}/>
-            <PlanBanner positions={positions} />
             <div className="map" ref={mapContainerRef}></div>
-            <div className="list_wrap">
-                <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
-                {positions.length > 0 && (<p>{positions[0].title}</p>)}
-                {positions.map((position, index) => (
-                    <button key={index} onClick={() => viewPlan(index)}>
-                        <p>{position.name}</p>
-                        <p>{position.memo}</p>
-                    </button>
-                    //building_name이 없는 경우의 문제
-                ))}
-            </div>
-            {selPosition && <DetailLoc position={selPosition} />}
-            <div className="bt_Wrap">
-                <button
-                    className="close_bt"
-                    onClick={() => transition()}
-                    style={{
-                        [btPosition]: selPosition === null ? '20%' : '40%'
-                    }}>
-                    {button}
-                </button>
-            </div>
+            <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
         </React.Fragment>
     );
 };
