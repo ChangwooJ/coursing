@@ -4,7 +4,6 @@ const AddPlan = async ({ content }) => {
     const { address } = content;
     const memo = "테스트";
     const content_id = 1;
-    console.log(memo, address);
     try {
         await axios.post('http://localhost:8000/api/add_plan', {
             list_address: address,
@@ -30,7 +29,6 @@ const DeletePlan = async ( list_id ) => {
             },
         });
         alert("delete complete");
-        console.log(list_id);
     } catch (error) {
         console.error('Error deleting plan:', error);
     }

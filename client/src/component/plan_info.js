@@ -18,7 +18,6 @@ const PlanInfo = ({setPositions, contentId}) => {
         }
         return [];
     }, [allLists, isAuthenticated, userInfo, contentId]);
-    console.log(lists);
 
     useEffect(() => {
         dispatch(fetchLists());

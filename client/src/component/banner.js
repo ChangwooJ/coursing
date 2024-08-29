@@ -82,7 +82,6 @@ const PlanBanner = ({ positions, setContentId }) => {
                         className={`each_hour ${selected === pos.list_id ? "selected": ""}`} 
                         onClick={() => changeLoc(pos.latlng, pos.list_id)}
                     >
-                        {console.log(pos)}
                         <div className="time_wrap">
                             <p className="start_hour">{`${pos.start_time}시`}</p>
                             <p className="end_hour">{`${pos.end_time}시`}</p>

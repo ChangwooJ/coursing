@@ -36,7 +36,7 @@ const getLogged = (req, res) => {
     if (req.isAuthenticated()) {
         const query = `
         SELECT 
-        user_info.* 
+        user_info.* , user.*
         FROM coursing.user 
         LEFT JOIN coursing.user_info ON user.id = user_info.user_id 
         WHERE user.username = ?
