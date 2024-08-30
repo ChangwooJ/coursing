@@ -45,35 +45,39 @@ const My_Page = () => {
         <React.Fragment>
             <div className="mypage_wrap">
                 {userInfo && (
-                    <div className="info_wrap">
-                        <div className="profile">
-                            {handleProfileImg()}
-                            <div className="my_info">
-                                <div className="info_name">{userInfo[0].name}</div>
-                                <div className="info_postnum">게시물 {user_post.length}</div>
-                                <div className="info_category">{user_category.map(uc => (
-                                    <p>#{uc.category_name}</p>
-                                ))}</div>
-                                <div className="info_intro">{userInfo[0].intro}</div>
-                                <button>프로필 설정</button>
+                    <>
+                        <div className="info_wrap">
+                            <div className="profile">
+                                {handleProfileImg()}
+                                <div className="my_info">
+                                    <div className="info_name">{userInfo[0].name}</div>
+                                    <div className="info_postnum">게시물 {user_post.length}</div>
+                                    <div className="info_category">{user_category.map(uc => (
+                                        <p>#{uc.category_name}</p>
+                                    ))}</div>
+                                    <div className="info_intro">{userInfo[0].intro}</div>
+                                    <button>프로필 설정</button>
+                                </div>
                             </div>
                         </div>
                         <div className="my_post">
                             {user_post.map(Upost => (
-                                <div key={Upost.post_id}>
-                                    <p>{Upost.title}</p>
-                                    {contents
-                                        .filter(content => content._post_id === Upost.post_id)
-                                        .map(con => (
-                                            <div key={con.content_id}>
-                                                <p>{con.content}</p>
-                                                <img src={con.img_src} />
-                                            </div>
-                                        ))}
+                                <div key={Upost.post_id} className="up_wrap">
+                                    <p className="up_title">{Upost.title}</p>
+                                    <div className="up_content">
+                                        {contents
+                                            .filter(content => content._post_id === Upost.post_id)
+                                            .slice(0, 3)
+                                            .map(con => (
+                                                <div key={con.content_id}>
+                                                    <img src={con.img_src} />
+                                                </div>
+                                            ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
         </React.Fragment>
