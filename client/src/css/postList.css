@@ -1,14 +1,22 @@
+.main_wrap {
+    width: 70%;
+    position: absolute;
+    margin: 2% 0 0 23%;
+}
+
 .post_wrap {
-    width: 74%;
+    box-sizing: border-box;
+    width: 100%;
     padding: 10px;
-    border: 1px solid black;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 1);
     margin-bottom: 20px;
+    border-radius: 5px;
 }
 
 .silde_frame {
     display: flex;
     flex-wrap: wrap;
-    width: 80%;
+    width: 75%;
     height: 80vh;
     .post_content {
         width: 80%;

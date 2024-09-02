@@ -1,17 +1,23 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../redux/actions/postActions";
 import { fetchUC } from "../redux/actions/user_categoryActions";
 import { fetchContents } from "../redux/actions/postActions";
+import { fetchPC } from "../redux/actions/post_categoryActions";
 import "../css/my_page.css";
 
 const My_Page = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
     const contents = useSelector(state => state.contents.contents);
     const user_category = useSelector(state => state.UC.UC);
+    const post_category = useSelector(state => state.PC.PC);
     const { loading, userInfo } = useContext(AuthContext);
+    const [fetch, setFetch] = useState(false);
+    const user_post = userInfo && userInfo[0] ? posts.filter(post => post.writer_id === userInfo[0].user_id) : [];
 
     useEffect(() => {
         dispatch(fetchPosts());
@@ -24,11 +30,17 @@ const My_Page = () => {
         }
     }, [loading, userInfo, dispatch]);
 
+
+    useEffect(() => {
+        if (!fetch) {
+            dispatch(fetchPC());
+            setFetch(true);
+        }
+    }, [dispatch, fetch]);
+
     if (loading) {
         return <div>Loading...</div>; // 로딩 표시 변경 필요
     }
-
-    const user_post = posts.filter(post => post.writer_id === userInfo[0].user_id);
 
     const handleProfileImg = () => {
         if (userInfo) {
@@ -40,7 +52,13 @@ const My_Page = () => {
             else return <div><img src={userInfo.profile_img} /></div>
         }
     };
-    console.log(user_post);
+
+    const handlePost = (post_id) => {
+        navigate(`/post/${post_id}`);
+    }
+
+    console.log(user_post[0].post_id);
+    
     return (
         <React.Fragment>
             <div className="mypage_wrap">
@@ -62,17 +80,22 @@ const My_Page = () => {
                         </div>
                         <div className="my_post">
                             {user_post.map(Upost => (
-                                <div key={Upost.post_id} className="up_wrap">
+                                <div key={Upost.post_id} className="up_wrap" onClick={() => handlePost(Upost.post_id)}>
                                     <p className="up_title">{Upost.title}</p>
                                     <div className="up_content">
                                         {contents
                                             .filter(content => content._post_id === Upost.post_id)
-                                            .slice(0, 3)
+                                            .slice(0, 4)
                                             .map(con => (
-                                                <div key={con.content_id}>
-                                                    <img src={con.img_src} />
-                                                </div>
+                                                <img src={con.img_src} />
                                             ))}
+                                    </div>
+                                    <div className="up_category_wrap">
+                                        {post_category
+                                            .filter(pc => pc.post_id === Upost.post_id)
+                                            .map(fpc => (
+                                            <p className="up_category">#{fpc.category_name}</p>
+                                        ))}
                                     </div>
                                 </div>
                             ))}

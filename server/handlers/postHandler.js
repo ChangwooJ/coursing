@@ -5,6 +5,7 @@ const getPostList = (req, res) => {
     SELECT post.*, user.*
     FROM coursing.post 
     LEFT JOIN coursing.user ON post.writer_id = user.id 
+    ORDER BY post_id ASC
     ;`;
     db.query(query, (err, result)=>{
         if (err) {

@@ -2,7 +2,6 @@ const db = require('./DBinfo');
 
 const getUCList = (req, res) => {
     const param = req.params.user_id;
-    console.log(param);
     const query = `
     SELECT user.id, category.category_name, category.cate_img_src  
     FROM coursing.user 

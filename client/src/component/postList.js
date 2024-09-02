@@ -18,9 +18,9 @@ const PostList = () => {
         dispatch(fetchContents());
     }, [dispatch]);
 
-    const handleAddPlan = async ({content}) => {
+    const handleAddPlan = async ({ content }) => {
         try {
-            await AddPlan({content});
+            await AddPlan({ content });
         } catch (error) {
             alert('Failed to add plan.');
         }
@@ -46,7 +46,6 @@ const PostList = () => {
                             }}
                         >
                             {contents.filter(content => content.post_id === post.post_id)
-                                .reverse()
                                 .map(content => (
                                     <SwiperSlide key={content.id}>
                                         <div className="silde_frame">
@@ -60,11 +59,31 @@ const PostList = () => {
                                                 <Maps id={`${content.id}`} address={content.address} />
                                             </div>
                                         </div>
-                                        <button className="add_plan" onClick={()=> handleAddPlan({content})}>추가하기</button>
+                                        <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>
                                     </SwiperSlide>
                                 ))
                             }
                         </Swiper>
+                        <div className="post_banner_wrap">
+                            {contents.filter(content => content.post_id === post.post_id)
+                                .map(con => (
+                                    <div
+                                        key={con.content_id}
+                                        className={`post_each_hour ${selected === pos.list_id ? "selected" : ""}`}
+                                        onClick={() => navigatePage(con.content_id)}
+                                    >
+                                        <div className="post_time_wrap">
+                                            <p className="post_start_hour">{`${con.start_time}시`}</p>
+                                            <p className="post_end_hour">{`${con.end_time}시`}</p>
+                                        </div>
+                                        <div className="post_middle_wrap">
+                                            <img src={con.category} className="post_cate_img" />
+                                            <p className="post_loc_name">{con.name}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
                         <div className="swiper-button-next swiper_bt"></div>
                     </div>
                 ))}

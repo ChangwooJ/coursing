@@ -7,8 +7,6 @@ import { LocationContext } from "../context/LocationContext";
 
 import "../css/banner.css";
 
-const { kakao } = window;
-
 const PlanBanner = ({ positions, setContentId }) => {
     const dispatch = useDispatch();
     const titles = useSelector((state) => state.titles.titles);
