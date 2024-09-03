@@ -1,22 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, fetchPosts } from "../redux/actions/postActions";
+import { Navigation } from 'swiper/modules';
+import { useNavigate } from "react-router-dom";
 import Maps from "../component/maps";
 import { AddPlan } from "./handlePlan";
+import fetchLocations from "./fetchLoc";
 import '../css/postList.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 const PostList = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
     const contents = useSelector(state => state.contents.contents);
+    const [locations, setLocations] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [swiperInstance, setSwiperInstance] = useState(null);
 
     useEffect(() => {
         dispatch(fetchPosts());
         dispatch(fetchContents());
     }, [dispatch]);
+
+    useEffect(() => {
+        const fetchLoc = async () => {
+            if (contents.length > 0) {
+                const locs = await fetchLocations(contents);
+                setLocations(locs);
+            }
+        };
+
+        fetchLoc();
+    }, [contents]);
 
     const handleAddPlan = async ({ content }) => {
         try {
@@ -26,67 +44,93 @@ const PostList = () => {
         }
     };
 
+    const navigateSlide = (postId, index) => {
+        if (swiperInstance) {
+            swiperInstance[postId].slideTo(index);
+        }
+        setSelected(index);
+    }
+
+    const navigatePage = (user_id) => {
+        navigate(`/profile/${user_id}`);
+    }
+
     return (
         <React.Fragment>
             <div className="main_wrap">
-                {posts.map((post) => (
-                    <div key={post.post_id} className="post_wrap">
-                        <h3>{post.title}</h3>
-                        <p>{post.user_name}</p>
-                        <div className="swiper-button-prev swiper_bt"></div>
-                        <Swiper
-                            spaceBetween={20}
-                            slidesPerView={1}
-                            navigation={{
-                                prevEl: ".swiper-button-prev",
-                                nextEl: ".swiper-button-next"
-                            }}
-                            pagination={{
-                                type: "bullets"
-                            }}
-                        >
-                            {contents.filter(content => content.post_id === post.post_id)
-                                .map(content => (
-                                    <SwiperSlide key={content.id}>
-                                        <div className="silde_frame">
-                                            <div className="post_content">
-                                                {content.content}
-                                            </div>
-                                            <img
-                                                src={content.img_src}
-                                            />
-                                            <div className="map_wrap">
-                                                <Maps id={`${content.id}`} address={content.address} />
-                                            </div>
-                                        </div>
-                                        <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>
-                                    </SwiperSlide>
-                                ))
-                            }
-                        </Swiper>
-                        <div className="post_banner_wrap">
-                            {contents.filter(content => content.post_id === post.post_id)
-                                .map(con => (
-                                    <div
-                                        key={con.content_id}
-                                        className={`post_each_hour ${selected === pos.list_id ? "selected" : ""}`}
-                                        onClick={() => navigatePage(con.content_id)}
-                                    >
-                                        <div className="post_time_wrap">
-                                            <p className="post_start_hour">{`${con.start_time}시`}</p>
-                                            <p className="post_end_hour">{`${con.end_time}시`}</p>
-                                        </div>
-                                        <div className="post_middle_wrap">
-                                            <img src={con.category} className="post_cate_img" />
-                                            <p className="post_loc_name">{con.name}</p>
-                                        </div>
+                {posts.map((post) => {
+                    const postLoc = locations.filter(location => location.post_id === post.post_id);
+                    const postCon = contents.filter(content => content.post_id === post.post_id)
+                    if (postCon.length === 0) {
+                        return null;
+                    }
+                    return (
+                        <div key={post.post_id} className="post_wrap">
+                            <div className="content_wrap">
+                                {console.log(post)}
+                                <div className="post_top" onClick={() => navigatePage(post.user_id)}>
+                                    <img src={post.profile_img} />
+                                    <div className="post_user_info">
+                                        <p className="info_id">{post.username}</p>
+                                        <p>{post.name}</p>
                                     </div>
-                                ))
-                            }
+                                </div>
+                                <Swiper
+                                    spaceBetween={20}
+                                    slidesPerView={1}
+                                    navigation
+                                    pagination={{
+                                        type: "bullets"
+                                    }}
+                                    onSwiper={(swiper) => setSwiperInstance(prev => ({ ...prev, [post.post_id]: swiper }))}
+                                    modules={[Navigation]}
+                                >
+                                    {contents.filter(content => content.post_id === post.post_id)
+                                        .map(content => (
+                                            <SwiperSlide key={content.id}>
+                                                <div className="silde_frame">
+                                                    <div className="post_content">
+                                                        {content.content}
+                                                    </div>
+                                                    <img
+                                                        src={content.img_src}
+                                                    />
+                                                    <div className="map_wrap">
+                                                        <Maps id={`${content.id}`} address={content.address} />
+                                                    </div>
+                                                </div>
+                                                <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>
+                                            </SwiperSlide>
+                                        ))
+                                    }
+                                </Swiper>
+                            </div>
+                            <div className="post_banner_wrap">
+                                <p className="post_banner_title">{postCon[0].title}</p>
+                                {contents.filter(content => content.post_id === post.post_id)
+                                    .map((con, index) => (
+                                        <>
+                                            <div
+                                                key={con.content_id}
+                                                className={`post_each_hour ${selected === con.content_id ? "selected" : ""}`}
+                                                onClick={() => navigateSlide(post.post_id, index)}
+                                            >
+                                                <div className="post_banner_num">{index + 1}</div>
+                                                <div className="post_middle_wrap">
+                                                    {locations[index] && (
+                                                        <p className="post_loc_name">{postLoc[index]?.name}</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="post_banner_sep">▼</div>
+                                        </>
+                                    ))
+                                }
+                            </div>
                         </div>
-                        <div className="swiper-button-next swiper_bt"></div>
-                    </div>
-                ))}
+
+                    )
+                })}
             </div>
         </React.Fragment>
     )

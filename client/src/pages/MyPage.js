@@ -1,11 +1,11 @@
 import React from "react";
-import My_Page from "../component/my_page";
+import User_Page from "../component/user_page.js";
 
 const MyPage = () => {
 
     return (
         <React.Fragment>
-            <My_Page />
+            <User_Page />
         </React.Fragment>
     )
 }

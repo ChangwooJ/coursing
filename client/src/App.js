@@ -31,7 +31,7 @@ const SideBar = () => {
   const { positions, setPositions } = useContext(PositionsContext);
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 표시 변경 필요
+    return <div className='loading'>Loading...</div>; // 로딩 표시 변경 필요
   }
 
   return (

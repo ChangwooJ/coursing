@@ -56,8 +56,6 @@ const My_Page = () => {
     const handlePost = (post_id) => {
         navigate(`/post/${post_id}`);
     }
-
-    console.log(user_post[0].post_id);
     
     return (
         <React.Fragment>

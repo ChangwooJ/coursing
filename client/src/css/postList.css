@@ -11,20 +11,48 @@
     box-shadow: 0 0 4px rgba(0, 0, 0, 1);
     margin-bottom: 20px;
     border-radius: 5px;
+    display: flex;
+}
+
+.content_wrap {
+    width: 75%;
+}
+
+.post_top {
+    width: fit-content;
+    height: 40px;
+    display: flex;
+    padding-bottom: 5px;
+    cursor: pointer;
+    img {
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+    .post_user_info {
+        .info_id {
+            font-size: 15px;
+            font-weight: 550;
+        }
+        font-size: 13px;
+        margin-right: 50px;
+    }
 }
 
 .silde_frame {
     display: flex;
     flex-wrap: wrap;
-    width: 75%;
+    width: 100%;
     height: 80vh;
+    padding-top: 10px;
+    border-top: 0.1px solid rgb(206, 206, 206);
     .post_content {
         width: 80%;
         height: 30%;
     }
     img {
         width: 40%;
-        height: 70%;
+        aspect-ratio: 1 / 1;
     }
     .map_wrap {
         width: 40%;
@@ -48,4 +76,69 @@
     border: 1px solid red;
     right: 20%;
     bottom: 50%;
+}
+
+.main_map {
+    z-index: 3;
+}
+
+.post_banner_wrap {
+    width: 25%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 0 4px black;
+    margin: 1%;
+    padding: 1%;
+    background-color: rgb(245, 252, 255);
+}
+
+.post_each_hour {
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 2px 0;
+    height: 40px;
+}
+
+.post_banner_title {
+    font-size: 16px;
+    font-weight: 550;
+    margin-bottom: 20px;
+}
+
+.post_banner_num {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    width: 10%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    background-color: rgb(172, 200, 252);
+    background-image: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.3), transparent 50%), radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.2), transparent 50%);
+}
+
+.post_middle_wrap {
+    text-align: center;
+    box-shadow: 0 0 1px gray;
+    border-radius: 10px;
+    width: 90%;
+    box-sizing: border-box;
+    margin-left: 10px;
+    padding: 2px;
+}
+
+.post_banner_sep {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    color: rgb(186, 208, 248);
+}
+
+.post_banner_sep:last-child {
+    visibility: hidden;
 }

@@ -72,6 +72,7 @@
 .up_wrap {
     width: 24%;
     padding: 1%;
+    cursor: pointer;
 }
 
 .up_content {
@@ -91,6 +92,10 @@
 
 .up_category_wrap {
     display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    overflow: hidden;
     .up_category {
     margin-right: 10px;
     background-color: rgb(238, 238, 238);
