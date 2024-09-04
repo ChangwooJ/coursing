@@ -6,11 +6,13 @@ const {getList, postList, deleteList, getTitle} = require('../handlers/listHandl
 const {postLogin, postLogout, getLogged} = require('../handlers/authHandler');
 const getUCList = require('../handlers/user_categoryHandler');
 const getPCList = require('../handlers/post_categoryHandler');
+const getUser = require('../handlers/userHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
 router.get('/my_list', getList);
 router.get('/title', getTitle);
+router.get('/user', getUser);
 router.get('/UC/:user_id', getUCList);
 router.get('/PC', getPCList);
 router.post('/add_plan', postList);

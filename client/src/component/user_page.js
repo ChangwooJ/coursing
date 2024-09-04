@@ -1,34 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../redux/actions/postActions";
+import { fetchUsers } from "../redux/actions/userActions";
 import { fetchUC } from "../redux/actions/user_categoryActions";
 import { fetchContents } from "../redux/actions/postActions";
 import { fetchPC } from "../redux/actions/post_categoryActions";
-import "../css/my_page.css";
+import { AuthContext } from "../context/AuthContext";
+import "../css/user_page.css";
 
 const User_Page = () => {
+    const { user_id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const users = useSelector(state => state.users.users);
     const posts = useSelector(state => state.posts.posts);
     const contents = useSelector(state => state.contents.contents);
     const user_category = useSelector(state => state.UC.UC);
     const post_category = useSelector(state => state.PC.PC);
-    const { loading, userInfo } = useContext(AuthContext);
     const [fetch, setFetch] = useState(false);
-    const user_post = userInfo && userInfo[0] ? posts.filter(post => post.writer_id === userInfo[0].user_id) : [];
+    const [myInfo, setMyInfo] = useState(false);
+    const { loading, userInfo } = useContext(AuthContext);
+    const user_post = posts.filter(post => post.writer_id === Number(user_id));
+    const user_info = users.find(user => user.user_id === Number(user_id));
 
     useEffect(() => {
         dispatch(fetchPosts());
         dispatch(fetchContents());
+        dispatch(fetchUsers());
     }, [dispatch]);
 
     useEffect(() => {
-        if (!loading && userInfo && userInfo[0]) {
-            dispatch(fetchUC(userInfo[0].user_id));
+        dispatch(fetchUC(Number(user_id)));
+        if(!loading && (userInfo[0].user_id === Number(user_id))){
+            setMyInfo(true);
         }
-    }, [loading, userInfo, dispatch]);
+    }, [user_id, loading]);
 
 
     useEffect(() => {
@@ -38,45 +45,34 @@ const User_Page = () => {
         }
     }, [dispatch, fetch]);
 
-    if (loading) {
-        return <div>Loading...</div>; // 로딩 표시 변경 필요
-    }
-
-    const handleProfileImg = () => {
-        if (userInfo) {
-            if (userInfo.profile_img == null) {
-                return (
-                    <div><img src="img/기본프로필.png" /></div>
-                )
-            }
-            else return <div><img src={userInfo.profile_img} /></div>
-        }
-    };
-
     const handlePost = (post_id) => {
         navigate(`/post/${post_id}`);
+    }
+
+    if(!user_info){
+        return <div>Loading...</div>;
     }
     
     return (
         <React.Fragment>
-            <div className="mypage_wrap">
-                {userInfo && (
+            <div className="page_wrap">
+                {user_info && (
                     <>
                         <div className="info_wrap">
                             <div className="profile">
-                                {handleProfileImg()}
-                                <div className="my_info">
-                                    <div className="info_name">{userInfo[0].name}</div>
+                                <div className="profile_img"><img src={user_info.profile_img} /></div>
+                                <div className="user_info">
+                                    <div className="info_name">{user_info.name}</div>
                                     <div className="info_postnum">게시물 {user_post.length}</div>
                                     <div className="info_category">{user_category.map(uc => (
                                         <p>#{uc.category_name}</p>
                                     ))}</div>
-                                    <div className="info_intro">{userInfo[0].intro}</div>
-                                    <button>프로필 설정</button>
+                                    <div className="info_intro">{user_info.intro}</div>
+                                    {myInfo && (<button>프로필 설정</button>)}
                                 </div>
                             </div>
                         </div>
-                        <div className="my_post">
+                        <div className="user_post">
                             {user_post.map(Upost => (
                                 <div key={Upost.post_id} className="up_wrap" onClick={() => handlePost(Upost.post_id)}>
                                     <p className="up_title">{Upost.title}</p>

@@ -26,7 +26,7 @@ const Header = ({ isAuthenticated, userInfo }) => {
         if (userInfo) {
             if (userInfo.profile_img == null) {
                 return (
-                    <div><img src="img/기본프로필.png" /></div>
+                    <div><img src="/img/기본프로필.png" /></div>
                 )
             }
             else return <div><img src={userInfo.profile_img} /></div>
@@ -71,25 +71,25 @@ const Header = ({ isAuthenticated, userInfo }) => {
                         className={menu === '/main' ? 'active' : ''} 
                         onClick={() => handleMenuClick('/main')}
                     >
-                        <img src="img/홈.png"/>
+                        <img src="/img/홈.png"/>
                     </button>
                     <button 
                         className={menu === '/my_plan' ? 'active' : ''} 
                         onClick={() => handleMenuClick('/my_plan')}
                     >
-                        <img src="img/내 일정.png"/>
+                        <img src="/img/내 일정.png"/>
                     </button>
                     <button 
                         className={menu === '/chat' ? 'active' : ''} 
                         onClick={() => handleMenuClick('/chat')}
                     >
-                        <img src="img/말풍선.png"/>
+                        <img src="/img/말풍선.png"/>
                     </button>
                     <button 
-                        className={menu === '/my_page' ? 'active' : ''}  
-                        onClick={() => handleMenuClick('/my_page')}
+                        className={menu === `/profile/${userInfo[0].user_id}` ? 'active' : ''}  
+                        onClick={() => handleMenuClick(`/profile/${userInfo[0].user_id}`)}
                     >
-                        <img src="img/마이페이지.png"/>
+                        <img src="/img/마이페이지.png"/>
                     </button>
                 </div>
             </div>

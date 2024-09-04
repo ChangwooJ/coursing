@@ -4,3 +4,4 @@ export const FETCH_LISTS = 'FETCH_LISTS';
 export const FETCH_TITLES = 'FETCH_TITLES';
 export const FETCH_UC = 'FETCH_UC';
 export const FETCH_PC = 'FETCH_PC';
+export const FETCH_USERS = 'FETCH_USERS';

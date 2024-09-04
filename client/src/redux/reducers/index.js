@@ -5,12 +5,14 @@ import listReducer from './listReducer';
 import titleReducer from './titleReducer';
 import UCReducer from './UCReducer';
 import PCReducer from './PCReducer';
+import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
   posts: postReducer,
   contents: contentReducer,
   lists: listReducer,
   titles: titleReducer,
+  users: userReducer,
   UC: UCReducer,
   PC: PCReducer,
 });

@@ -5,7 +5,8 @@ import { PositionsContext, PositionsProvider } from './context/PositionsContext'
 import Login from './pages/Login';
 import Main from './pages/Main';
 import MyList from './pages/MyList';
-import MyPage from './pages/MyPage';
+import UserPage from './pages/UserPage';
+import Post from './pages/Post';
 import PlanInfo from './component/plan_info';
 import Header from './component/header';
 import PlanBanner from './component/banner';
@@ -55,7 +56,8 @@ function AppContent() {
         <Route path='/' element={<Login />} />
         <Route path='/main' element={<Main />} />
         <Route path='/my_plan' element={<ProtectedRoute element={<MyList />} />} />
-        <Route path='/my_page' element={<MyPage />} />
+        <Route path='/profile/:user_id' element={<UserPage />} />
+        <Route path='/post/:post_id' element={<Post />} />
       </Routes>
     </>
   )
