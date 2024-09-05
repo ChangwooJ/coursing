@@ -4,7 +4,7 @@ import "../css/list_map.css";
 
 const { kakao } = window;
 
-const Maps = ({ id, address }) => {
+const Maps = ({ address, post }) => {
     const mapContainerRef = useRef(null);  // useRef를 사용하여 DOM 요소를 참조
     const [location, setLocation] = useState(null);  // 위치 상태를 추가
     const [lat, setLat] = useState(0);
@@ -51,7 +51,7 @@ const Maps = ({ id, address }) => {
             const container = mapContainerRef.current;
             const options = {
                 center: new kakao.maps.LatLng(lat, lon),
-                level: 3
+                level: 4
             };
             var map = new kakao.maps.Map(container, options);  // 카카오 지도 초기화
 
@@ -67,19 +67,34 @@ const Maps = ({ id, address }) => {
             marker.setMap(map);
 
             // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-            var iwContent = `<div>${location.road_address.building_name}</div>`, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            /*var iwContent = `<div>${location.road_address.building_name}</div>`, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-            // 인포윈도우를 생성합니다
+            */
+            /* 인포윈도우를 생성합니다
             var infowindow = new kakao.maps.InfoWindow({
                 content: iwContent,
                 removable: iwRemoveable
-            });
+            });*/
 
-            // 마커 위에 인포윈도우를 표시합니다
+            /* 마커 위에 인포윈도우를 표시합니다
             infowindow.open(map, marker);
 
-            map.setZoomable(false);
+            map.setZoomable(false);*/
+
+            kakao.maps.event.addListener(map, 'tilesloaded', function() {
+                // 현재 지도의 중심 좌표 가져오기
+                var center = map.getCenter();
+            
+                // 새로운 중심 좌표를 계산 (오른쪽으로 20% 이동)
+                var moveLatLon = new kakao.maps.LatLng(center.getLat(), center.getLng() - (map.getBounds().getSouthWest().getLng() - center.getLng()) * 0.3);
+            
+                // 애니메이션 없이 바로 중심을 설정
+                if(post){
+                    map.setCenter(moveLatLon);
+                    map.setZoomable(false);
+                    map.setDraggable(false);
+                }
+            });
         }
     }
 

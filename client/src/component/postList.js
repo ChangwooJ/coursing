@@ -51,8 +51,12 @@ const PostList = () => {
         setSelected(index);
     }
 
-    const navigatePage = (user_id) => {
+    const navigatePage2User = (user_id) => {
         navigate(`/profile/${user_id}`);
+    }
+
+    const navigatePage2Detail = (post_id) => {
+        navigate(`/post/${post_id}`);
     }
 
     return (
@@ -68,7 +72,7 @@ const PostList = () => {
                         <div key={post.post_id} className="post_wrap">
                             <div className="content_wrap">
                                 {console.log(post)}
-                                <div className="post_top" onClick={() => navigatePage(post.user_id)}>
+                                <div className="post_top" onClick={() => navigatePage2User(post.user_id)}>
                                     <img src={post.profile_img} />
                                     <div className="post_user_info">
                                         <p className="info_id">{post.username}</p>
@@ -88,7 +92,7 @@ const PostList = () => {
                                     {contents.filter(content => content.post_id === post.post_id)
                                         .map(content => (
                                             <SwiperSlide key={content.id}>
-                                                <div className="silde_frame">
+                                                <div className="silde_frame" onClick={() => navigatePage2Detail(content.post_id)}>
                                                     <div className="post_content">
                                                         {content.content}
                                                     </div>
@@ -96,7 +100,7 @@ const PostList = () => {
                                                         src={content.img_src}
                                                     />
                                                     <div className="map_wrap">
-                                                        <Maps id={`${content.id}`} address={content.address} />
+                                                        <Maps address={content.address} post={false} />
                                                     </div>
                                                 </div>
                                                 <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>

@@ -23,6 +23,7 @@ const getPostContent = (req, res) => {
     SELECT post.*, post_content.* 
     FROM coursing.post 
     LEFT JOIN coursing.post_content ON post.post_id = post_content._post_id
+    ORDER BY start_time ASC
     ;`;
     db.query(query, (err, result)=>{
         if (err) {

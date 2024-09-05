@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import Search from "./search";
-import "../css/list_map.css";
 import { PositionsContext } from '../context/PositionsContext';
 import { LocationContext } from '../context/LocationContext';
 
