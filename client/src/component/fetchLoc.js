@@ -4,8 +4,10 @@ const { kakao } = window;
 
 const fetchLocations = async (lists) => {
     const api_key = process.env.REACT_APP_API_KEY;
-
-    const locationsPromises = lists.map(async (list) => {
+    
+    const listsArray = Array.isArray(lists) ? lists : [lists];
+    
+    const locationsPromises = listsArray.map(async (list) => {
         if (list.address) {
             try {
                 const encodedAddress = encodeURIComponent(list.address);
@@ -40,7 +42,7 @@ const fetchLocations = async (lists) => {
 
     const resolvedLocations = await Promise.all(locationsPromises);
     const filteredLocations = resolvedLocations.filter(location => location !== null);
-
+    
     return filteredLocations;
 }
 

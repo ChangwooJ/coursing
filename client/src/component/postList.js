@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, fetchPosts } from "../redux/actions/postActions";
 import { Navigation } from 'swiper/modules';
 import { useNavigate } from "react-router-dom";
-import Maps from "../component/maps";
+import Maps from "./fetchMaps";
 import { AddPlan } from "./handlePlan";
 import fetchLocations from "./fetchLoc";
 import '../css/postList.css';
@@ -71,7 +71,6 @@ const PostList = () => {
                     return (
                         <div key={post.post_id} className="post_wrap">
                             <div className="content_wrap">
-                                {console.log(post)}
                                 <div className="post_top" onClick={() => navigatePage2User(post.user_id)}>
                                     <img src={post.profile_img} />
                                     <div className="post_user_info">
@@ -100,7 +99,7 @@ const PostList = () => {
                                                         src={content.img_src}
                                                     />
                                                     <div className="map_wrap">
-                                                        <Maps address={content.address} post={false} />
+                                                        <Maps content={content} post={false} />
                                                     </div>
                                                 </div>
                                                 <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>
