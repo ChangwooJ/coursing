@@ -15,7 +15,7 @@ const PlanBanner = ({ positions, setContentId }) => {
     const [view, setView] = useState(false);    //드롭다운 상태관리
     const [selected, setSelected] = useState(null);    //일정의 목록 선택 상태 여부
     const [initTitle, setInitTitle] = useState("일정을 선택해주세요");
-
+//console.log(positions);
     const titleList = useMemo(() => {     //useEffect에 객체 전달로 인한 리랜더링 방지, user_content_title객체
         if (isAuthenticated && userInfo) {
             return titles.filter(title => title._user_id === userInfo[0].user_id);

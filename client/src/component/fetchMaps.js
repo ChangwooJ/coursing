@@ -12,7 +12,6 @@ const useFetchMaps = ({ content }) => {
         const fetchLoc = async () => {
             if (content && content.length > 0) {
                 const locs = await fetchLocations(content);
-                console.log(content);
                 if (locs) {
                     setLocations(locs);
                 }
@@ -33,9 +32,47 @@ const useFetchMaps = ({ content }) => {
                 clickable: true
             }));
 
+            const overlays = locations.map((loc, index) => {
+                const imgSrc = content[index]?.img_src;
+                const infoText = content[index]?.content || '정보 없음';
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'customoverlay';
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = imgSrc;
+                imgElement.style.width = '150px';
+                imgElement.style.height = '150px';
+
+                const textBox = document.createElement('div');
+                textBox.className = 'text-box';
+                textBox.innerHTML = infoText;
+
+                textBox.addEventListener('click', () => {
+                    if (textBox.style.height === '140px') {
+                        textBox.style.height = 'auto';
+                    } else {
+                        textBox.style.height = '140px';
+                    }
+                });
+
+                contentDiv.appendChild(imgElement);
+                contentDiv.appendChild(textBox);
+
+                const overlay = new kakao.maps.CustomOverlay({
+                    content: contentDiv,
+                    position: loc.latlng,
+                    xAnchor: -0.1,
+                    yAnchor: 0.6
+                });
+
+                return overlay;
+            });
+
             setMapDetails({
                 option: options,
-                markers: markers
+                markers: markers,
+                overlays: overlays,
             });
         }
     }, [locations]);
@@ -44,18 +81,3 @@ const useFetchMaps = ({ content }) => {
 };
 
 export default useFetchMaps;
-
-/*kakao.maps.event.addListener(map, 'tilesloaded', function() {
-                // 현재 지도의 중심 좌표 가져오기
-                var center = map.getCenter();
-            
-                // 새로운 중심 좌표를 계산 (오른쪽으로 20% 이동)
-                var moveLatLon = new kakao.maps.LatLng(center.getLat(), center.getLng() - (map.getBounds().getSouthWest().getLng() - center.getLng()) * 0.3);
-            
-                // 애니메이션 없이 바로 중심을 설정
-                if(post){
-                    map.setCenter(moveLatLon);
-                    map.setZoomable(false);
-                    map.setDraggable(false);
-                }
-            });*/

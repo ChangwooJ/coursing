@@ -20,9 +20,10 @@ const getPostList = (req, res) => {
 
 const getPostContent = (req, res) => {
     const query = `
-    SELECT post.*, post_content.* 
+    SELECT post.*, post_content.* , category.cate_img_src
     FROM coursing.post 
     LEFT JOIN coursing.post_content ON post.post_id = post_content._post_id
+    LEFT JOIN coursing.category ON post_content.cate_id = category.category_id 
     ORDER BY start_time ASC
     ;`;
     db.query(query, (err, result)=>{
