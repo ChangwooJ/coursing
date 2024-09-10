@@ -24,7 +24,7 @@ const getPostContent = (req, res) => {
     FROM coursing.post 
     LEFT JOIN coursing.post_content ON post.post_id = post_content._post_id
     LEFT JOIN coursing.category ON post_content.cate_id = category.category_id 
-    ORDER BY start_time ASC
+    ORDER BY post_id ASC, start_time ASC
     ;`;
     db.query(query, (err, result)=>{
         if (err) {

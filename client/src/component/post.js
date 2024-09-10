@@ -28,7 +28,7 @@ const Post_Detail = () => {
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
     const PC = post_category.filter(pc => pc.post_id === id);
     const { option, markers, overlays } = useFetchMaps({ content });
-
+console.log(option);
     useEffect(() => {
         const fetch = async () => {
             await dispatch(fetchPosts());

@@ -1,28 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents, fetchPosts } from "../redux/actions/postActions";
 import { Navigation } from 'swiper/modules';
 import { useNavigate } from "react-router-dom";
-import Maps from "./fetchMaps";
 import { AddPlan } from "./handlePlan";
 import fetchLocations from "./fetchLoc";
+import useFetchMaps from "./fetchMaps";
 import '../css/postList.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const PostList = () => {
+const { kakao } = window;
+
+const PostList = () => {    //전달받은 post_id로 content생성 및 표현. 그걸 기반으로 post.js처럼 맵 제공.
+    const mapRefs = useRef({});
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
     const contents = useSelector(state => state.contents.contents);
+    const [loading, setLoading] = useState(true);
     const [locations, setLocations] = useState([]);
     const [selected, setSelected] = useState(null);
     const [swiperInstance, setSwiperInstance] = useState(null);
+    const { option, markers, overlays } = useFetchMaps({ contents });
 
+console.log(option);
     useEffect(() => {
-        dispatch(fetchPosts());
-        dispatch(fetchContents());
+        const fetch = async () => {
+            await dispatch(fetchPosts());
+            await dispatch(fetchContents());
+            setLoading(false);
+        };
+        fetch();
     }, [dispatch]);
 
     useEffect(() => {
@@ -35,6 +45,10 @@ const PostList = () => {
 
         fetchLoc();
     }, [contents]);
+
+    useEffect(() => {
+
+    }, [])
 
     const handleAddPlan = async ({ content }) => {
         try {
@@ -57,6 +71,10 @@ const PostList = () => {
 
     const navigatePage2Detail = (post_id) => {
         navigate(`/post/${post_id}`);
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -89,9 +107,9 @@ const PostList = () => {
                                     modules={[Navigation]}
                                 >
                                     {contents.filter(content => content.post_id === post.post_id)
-                                        .map(content => (
+                                        .map((content, index) => (
                                             <SwiperSlide key={content.id}>
-                                                <div className="silde_frame" onClick={() => navigatePage2Detail(content.post_id)}>
+                                                <div className="silde_frame" onClick={() => {navigatePage2Detail(content.post_id)}}>
                                                     <div className="post_content">
                                                         {content.content}
                                                     </div>
@@ -99,7 +117,12 @@ const PostList = () => {
                                                         src={content.img_src}
                                                     />
                                                     <div className="map_wrap">
-                                                        <Maps content={content} post={false} />
+                                                        <div className="main_map"
+                                                            ref={(el) => {
+                                                                const key = `${post.post_id}-${index}`;
+                                                                mapRefs.current[key] = { element: el, content };
+                                                            }}
+                                                        ></div>
                                                     </div>
                                                 </div>
                                                 <button className="add_plan" onClick={() => handleAddPlan({ content })}>추가하기</button>
