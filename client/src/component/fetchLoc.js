@@ -4,7 +4,7 @@ const { kakao } = window;
 
 const fetchLocations = async (lists) => {
     const api_key = process.env.REACT_APP_API_KEY;
-    
+
     const listsArray = Array.isArray(lists) ? lists : [lists];
     
     const locationsPromises = listsArray.map(async (list) => {
@@ -30,7 +30,8 @@ const fetchLocations = async (lists) => {
                         category: list.cate_img_src,
                         start_time: list.start_time,
                         end_time: list.end_time,
-                        post_id: list.post_id
+                        post_id: list.post_id,
+                        address: list.address
                     };
                 }
             } catch (error) {

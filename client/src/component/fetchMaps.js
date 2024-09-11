@@ -7,10 +7,10 @@ const { kakao } = window;
 const useFetchMaps = ({ content }) => {
     const [locations, setLocations] = useState([]);  // 위치 상태를 추가
     const [mapDetails, setMapDetails] = useState({ option: {}, markers: [] });
-    
+
     useEffect(() => {
         const fetchLoc = async () => {
-            if (content && content.length > 0) {
+            if (content) {
                 const locs = await fetchLocations(content);
                 if (locs) {
                     setLocations(locs);

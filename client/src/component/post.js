@@ -27,8 +27,8 @@ const Post_Detail = () => {
     const post = posts.find(p => p.post_id === id);
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
     const PC = post_category.filter(pc => pc.post_id === id);
-    const { option, markers, overlays } = useFetchMaps({ content });
-console.log(option);
+    const { option, markers, overlays } = useFetchMaps({ content: content });
+
     useEffect(() => {
         const fetch = async () => {
             await dispatch(fetchPosts());
@@ -165,14 +165,6 @@ console.log(option);
                 <div className="post_detail_main">
                     <div className="post_detail_body">
                         <div className="main_map" ref={mapContainerRef} ></div>
-                        {content.map(con => (
-                            <div className="post_detail_img">
-                                <div className="con_img"><img src={con.img_src} /></div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="post_detail_footer">
-                        footer
                     </div>
                 </div>
             </div>

@@ -2,22 +2,21 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import Search from "./search";
 import { PositionsContext } from '../context/PositionsContext';
 import { LocationContext } from '../context/LocationContext';
+import useFetchMaps from "./fetchMaps";
+import fetchLocations from "./fetchLoc";
 
 const { kakao } = window;
 
 const ListMap = () => {
     const mapContainerRef = useRef(null);
+    const mapRef = useRef(null);
     const [map, setMap] = useState(null);
     const [searchPosition, setSearchPosition] = useState(null);
     const [loc, setLoc] = useState([]);
+    const [locations, setLocations] = useState([]);
     const { positions } = useContext(PositionsContext);
     const { location } = useContext(LocationContext);
-
-    useEffect(() => {
-        if (positions.length > 0) {
-            initializeMap(positions);
-        }
-    }, [positions]);
+    const { option, markers } = useFetchMaps({content: positions});
 
     useEffect(() => {
         if(location !== null && map) {
@@ -31,27 +30,50 @@ const ListMap = () => {
         }
     }, [searchPosition]);
 
-    const initializeMap = (positions) => {
-        if (mapContainerRef.current && positions.length > 0) {
-            const container = mapContainerRef.current;
-            const options = {
-                center: positions[0].latlng,
-                level: 4
-            };
-            const newMap = new kakao.maps.Map(container, options);
-
-            positions.forEach((position) => {
-                const marker = new kakao.maps.Marker({
-                    position: position.latlng,
-                    clickable: true
-                });
-                marker.setMap(newMap);
-            });
-
+    useEffect(() => {
+        if (mapContainerRef.current && option.center && markers.length > 0) {
+            const newMap = new kakao.maps.Map(mapContainerRef.current, option);
+            mapRef.current = newMap;
             setMap(newMap);
+            markers.forEach(marker => marker.setMap(newMap));  //마커 설정
         }
-    };
+    }, [option, markers]);
 
+    //선 생성 좌표 모음
+    useEffect(() => {
+        const fetchAllLocations = async () => {
+            const locs = [];
+            for (const con of positions) {
+                const loc = await fetchLocations(con);
+                if (loc && loc.length > 0) {
+                    locs.push(...loc);
+                }
+            }
+            setLocations(locs);
+        };
+
+        fetchAllLocations();
+    }, [positions]);
+
+    const createPolyline = (map, positions) => {
+        const polyline = new kakao.maps.Polyline({
+            path: positions,
+            strokeWeight: 3,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.7,
+            strokeStyle: 'solid'
+        });
+    
+        polyline.setMap(map);
+        return polyline;
+    };
+        
+    // 마커의 위치를 저장
+    const position = locations.map(loc => loc.latlng);
+
+    // 선 그리기
+    const polyline = createPolyline(mapRef.current, position);
+    
     const movePlanPosition = () => {
         map.panTo(location);
     }

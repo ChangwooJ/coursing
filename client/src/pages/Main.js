@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts } from "../redux/actions/postActions";
 import PostList from "../component/postList";
 import '../css/Main.css';
 import "../css/mylist.css";
 
 const Main = () => {
-    //post리스트 받아서 map으로 반복. postlist컴포넌트에 post마다의 content전달 혹은 post_id만 전달.
+    const dispatch = useDispatch();
+    const posts = useSelector(state => state.posts.posts);
+    const [loading, setLoading] = useState(true);
+    //console.log(posts);
+
+    useEffect(() => {
+        const fetchPostList = () => {
+            dispatch(fetchPosts());
+            setLoading(false);
+        }
+        fetchPostList();
+    }, [dispatch]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <React.Fragment>
-            <div className="postlist_wrap">
-                <PostList />
+            <div className="post_main_wrap">
+                {posts.map(post => {
+                    return (
+                        <div key={post.post_id} className="main_wrap">
+                            <PostList post={post} />
+                        </div>
+                    )
+                })}
             </div>
         </React.Fragment>
     )
