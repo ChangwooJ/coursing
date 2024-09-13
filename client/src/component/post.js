@@ -7,6 +7,7 @@ import useFetchMaps from "./fetchMaps";
 import "../css/post.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchPC } from "../redux/actions/post_categoryActions";
+import AddPopUp from "./addPopUp";
 
 const { kakao } = window;
 
@@ -23,6 +24,9 @@ const Post_Detail = () => {
     const [loading, setLoading] = useState(true);
     const [overlayIdx, setOverlayIdx] = useState(0);
     const [locations, setLocations] = useState([]);
+    const [positions, setPositions] = useState(null);
+    const [selectedCon, setSelectedCon] = useState(null);
+    const [showPopUp, setShowPopUp] = useState(false);
 
     const post = posts.find(p => p.post_id === id);
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
@@ -82,10 +86,6 @@ const Post_Detail = () => {
         fetchAllLocations();
     }, [content]);
 
-    const handleProfile = (user_id) => {
-        navigate(`/profile/${user_id}`);
-    }
-
     //스크롤 바에서 클릭한 내용의 위치로 이동
     const handlePosition = async (content, index) => {
         setOverlayIdx(index);
@@ -110,16 +110,27 @@ const Post_Detail = () => {
     };
     
     // 마커의 위치를 저장
-    const positions = locations.map(loc => loc.latlng);
+    const markerPos = locations.map(loc => loc.latlng);
 
     // 선 그리기
-    const polyline = createPolyline(mapRef.current, positions);
+    const polyline = createPolyline(mapRef.current, markerPos);
 
-    if (loading) {
-        return <div>Loading...</div>;
+    const handleProfile = (user_id) => {
+        navigate(`/profile/${user_id}`);
     }
 
-    if (!post) {
+    //일정 추가 팝업
+    const AddPlan = (con) => {
+        setSelectedCon(con);
+        setShowPopUp(true);
+    }
+
+    const closePopUp = () => {
+        setSelectedCon(null);
+        setShowPopUp(false);
+    }
+
+    if (loading || !post) {
         return <div>Loading...</div>;
     }
 
@@ -149,9 +160,12 @@ const Post_Detail = () => {
                     <div className="next_bar">
                         {content.map((con, index) => (
                             <>
-                                <div onClick={() => handlePosition(con, index)}>
-                                    <p>{con.name}</p>
-                                    <img src={con.cate_img_src} style={{ width: '20px' }} />
+                                <div>
+                                    <div onClick={() => handlePosition(con, index)}>
+                                        <p>{con.name}</p>
+                                        <img src={con.cate_img_src} style={{ width: '20px' }} />
+                                    </div>
+                                    <button className="addPlan" onClick={() => AddPlan(con)}>+</button>
                                 </div>
                                 {index < content.length - 1 && (
                                     Array(3).fill().map((_, i) => (
@@ -162,6 +176,13 @@ const Post_Detail = () => {
                         ))}
                     </div>
                 </div>
+                {showPopUp && (
+                    <div className="popup">
+                        <div className="popup-content">
+                            <AddPopUp content={selectedCon} onClose={closePopUp} />
+                        </div>
+                    </div>
+                )}
                 <div className="post_detail_main">
                     <div className="post_detail_body">
                         <div className="main_map" ref={mapContainerRef} ></div>

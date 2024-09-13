@@ -9,7 +9,6 @@ const Main = () => {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
     const [loading, setLoading] = useState(true);
-    //console.log(posts);
 
     useEffect(() => {
         const fetchPostList = () => {

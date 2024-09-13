@@ -8,9 +8,11 @@
 
 .login_wrap {
     .login {
+        box-sizing: border-box;
+        border-radius: 5px;
         margin-bottom: 10px;
         width: 100%;
-        height: 30px;
+        height: 35px;
         text-indent: 10px;
     }
 
@@ -25,6 +27,7 @@
         height: 40px;
         margin-bottom: 5px;
         background-color: rgb(88, 168, 253);
+        border-radius: 5px;
         border: none;
         color: white;
         font-weight: 550;

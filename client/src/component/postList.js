@@ -29,14 +29,6 @@ const PostList = ({ post }) => {
         fetch();
     }, [dispatch]);
 
-    const handleAddPlan = async ({ content }) => {
-        try {
-            await AddPlan({ content });
-        } catch (error) {
-            alert('Failed to add plan.');
-        }
-    };
-
     const navigateSlide = (postId, index) => {
         if (swiperInstance) {
             swiperInstance[postId].slideTo(index);
@@ -102,7 +94,6 @@ const PostList = ({ post }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className="add_plan" onClick={() => handleAddPlan({ con })}>추가하기</button>
                             </SwiperSlide>
                             ))
                         }

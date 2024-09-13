@@ -50,6 +50,12 @@ function AppContent() {
 
   const show = location.pathname !== '/' && location.pathname !== '/sign_up';
 
+  const { loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div className='loading'>Loading...</div>; // 로딩 표시 변경 필요
+  }
+
   return (
     <>
       {show && <SideBar />}
