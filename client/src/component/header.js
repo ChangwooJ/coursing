@@ -52,6 +52,11 @@
             navigate(menu);
         }
 
+        if(!isAuthenticated || !userInfo) {
+            return <div className="isNotLogged"><a href="/">로그인</a>을 먼저 해주세요.</div>
+        }
+
+
         return (
             <React.Fragment>
                 <div className="my_banner_wrap">

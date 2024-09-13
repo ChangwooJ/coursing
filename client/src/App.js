@@ -11,6 +11,7 @@ import PlanInfo from './component/plan_info';
 import Header from './component/header';
 import PlanBanner from './component/banner';
 import { LocationProvider } from './context/LocationContext';
+import SignUp from './pages/SignUp';
 
 const ProtectedRoute = ({ element }) => {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -47,7 +48,7 @@ const SideBar = () => {
 function AppContent() {
   const location = useLocation();
 
-  const show = location.pathname !== '/';
+  const show = location.pathname !== '/' && location.pathname !== '/sign_up';
 
   return (
     <>
@@ -58,6 +59,7 @@ function AppContent() {
         <Route path='/my_plan' element={<ProtectedRoute element={<MyList />} />} />
         <Route path='/profile/:user_id' element={<UserPage />} />
         <Route path='/post/:post_id' element={<Post />} />
+        <Route path='/sign_up' element={<SignUp />} />
       </Routes>
     </>
   )

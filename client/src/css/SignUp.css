@@ -1,0 +1,37 @@
+.signup_wrap {
+    text-align: center;
+    margin-left: 40%;
+    margin-top: 10%;
+    width: 20%;
+}
+
+.signup_form {
+    margin-top: 40px;
+}
+
+.signup_wrap {
+    .signup {
+        margin-bottom: 10px;
+        width: 90%;
+        height: 35px;
+        text-indent: 10px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+        border: 0.1px solid rgba(0, 0, 0, 0.5);
+        box-sizing: border-box;
+    }
+}
+
+.signup_wrap .signup_bt_wrap {
+    margin-top: 30px;
+    .bt {
+        width: 90%;
+        height: 40px;
+        margin-bottom: 5px;
+        background-color: rgb(88, 168, 253);
+        border: none;
+        color: white;
+        font-weight: 550;
+        border-radius: 5px;
+    }
+}

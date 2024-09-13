@@ -54,7 +54,7 @@ const Login = () => {
                 </div>
                 <div className="login_bt_wrap">
                     <input className="bt login_bt" type="submit" value="로그인" />
-                    <input className="bt sign_up" type="button" value="회원가입" />
+                    <button className="bt sign_up" onClick={() => navigate('/sign_up')}>회원가입</button>
                 </div>
                 <div className="find_my_account">
                     <a href="/find_my/id">아이디 찾기</a>
