@@ -24,7 +24,6 @@ const Post_Detail = () => {
     const [loading, setLoading] = useState(true);
     const [overlayIdx, setOverlayIdx] = useState(0);
     const [locations, setLocations] = useState([]);
-    const [positions, setPositions] = useState(null);
     const [selectedCon, setSelectedCon] = useState(null);
     const [showPopUp, setShowPopUp] = useState(false);
 
