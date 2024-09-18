@@ -3,7 +3,7 @@
     import { useLocation, useNavigate } from "react-router-dom";
     import "../css/header.css";
 
-    const Header = ({ isAuthenticated, userInfo }) => {
+    const Header = ({ isAuthenticated, userInfo, loading }) => {
         const [logged, setLogged] = useState(false);
         const [menu, setMenu] = useState('/main');
         const navigate = useNavigate();
@@ -56,6 +56,9 @@
             return <div className="isNotLogged"><a href="/">로그인</a>을 먼저 해주세요.</div>
         }
 
+        if(loading){
+            return <div>Loading...</div>;
+        }
 
         return (
             <React.Fragment>

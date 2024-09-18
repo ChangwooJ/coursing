@@ -39,7 +39,7 @@ const SideBar = () => {
   return (
     <>
       <PlanInfo setPositions={setPositions} contentId={contentId} />
-      <Header isAuthenticated={isAuthenticated} userInfo={userInfo} />
+      <Header isAuthenticated={isAuthenticated} userInfo={userInfo} loading={loading} />
       <PlanBanner positions={positions} setContentId={setContentId} />
     </>
   );

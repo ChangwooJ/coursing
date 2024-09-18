@@ -20,13 +20,13 @@ const getList = (req, res) => {
 };
 
 const postList = (req, res) => {
-    const { list_address, memo, content_id } = req.body;
+    const { address, memo, content_id, category, start_time, end_time } = req.body;
     const query = `
     INSERT 
     INTO coursing.user_content_list 
-    (list_address, memo, content_id) VALUES (?, ?, ?)
+    (address, memo, content_id, category, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)
     ;`;
-    const params = [list_address, memo, content_id];
+    const params = [address, memo, content_id, category, start_time, end_time];
     db.query(query, params, (err, result)=>{
         if(err) {
             res.status(500).send(err);
@@ -72,4 +72,5 @@ const getTitle = (req, res) => {
         }
     })
 }
+
 module.exports = { getList, postList, deleteList, getTitle };

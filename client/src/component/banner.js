@@ -10,12 +10,12 @@ import "../css/banner.css";
 const PlanBanner = ({ positions, setContentId }) => {
     const dispatch = useDispatch();
     const titles = useSelector((state) => state.titles.titles);
-    const { isAuthenticated, userInfo } = useContext(AuthContext);
+    const { isAuthenticated, userInfo, loading } = useContext(AuthContext);
     const { setLocation } = useContext(LocationContext);
     const [view, setView] = useState(false);    //드롭다운 상태관리
     const [selected, setSelected] = useState(null);    //일정의 목록 선택 상태 여부
     const [initTitle, setInitTitle] = useState("일정을 선택해주세요");
-    
+
     const titleList = useMemo(() => {     //useEffect에 객체 전달로 인한 리랜더링 방지, user_content_title객체
         if (isAuthenticated && userInfo) {
             return titles.filter(title => title._user_id === userInfo[0].user_id);
@@ -61,6 +61,10 @@ const PlanBanner = ({ positions, setContentId }) => {
     const changeLoc = (latlng, list_id) => {
         setLocation(latlng);
         setSelected(list_id);
+    }
+
+    if(loading){
+        return <div>Loading...</div>;
     }
 
     return (
