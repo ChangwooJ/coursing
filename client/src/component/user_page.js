@@ -49,9 +49,18 @@ const User_Page = () => {
         navigate(`/post/${post_id}`);
     }
 
-    if(!user_info){
+    const handleNewPost = () => {
+        navigate('/create_post');
+    }
+
+    if(loading){
         return <div>Loading...</div>;
     }
+
+    //마이페이지의 경우 로그인 페이지로의 자동 이동 기능이 필요함
+    /*if(!loading && userInfo){
+        navigate('/');
+    }*/
     
     return (
         <React.Fragment>
@@ -68,11 +77,16 @@ const User_Page = () => {
                                         <p>#{uc.category_name}</p>
                                     ))}</div>
                                     <div className="info_intro">{user_info.intro}</div>
-                                    {myInfo && (<button>프로필 설정</button>)}
                                 </div>
+                                {myInfo && (
+                                    <button className="setting_bt"><img src="/img/설정.png" /></button>
+                                )}
                             </div>
                         </div>
                         <div className="user_post">
+                            <button className="new_post_bt">
+                                <img src="/img/글쓰기.png" onClick={() => handleNewPost()}/>
+                            </button>
                             {user_post.map(Upost => (
                                 <div key={Upost.post_id} className="up_wrap" onClick={() => handlePost(Upost.post_id)}>
                                     <p className="up_title">{Upost.title}</p>

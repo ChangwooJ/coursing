@@ -1,0 +1,13 @@
+.create_post_root {
+    display: flex;
+    position: relative;
+    width: 70%;
+    margin: 0% 0 0 23%;
+}
+
+.create_post {
+    border: 1px solid black;
+    width: 45%;
+    height: 90vh;
+    margin-top: 5vh;
+}

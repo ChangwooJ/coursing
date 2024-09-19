@@ -8,9 +8,9 @@
 .info_wrap {
     width: 80%;
     position: relative;
-    justify-content: center;
+    display: flex;
     margin: 0 auto;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
 }
 
 .info_wrap .profile{
@@ -46,16 +46,37 @@
         font-size: 16px;
         float: left;
     }
-    button {
-        position: absolute;
-        right: 10px;
+}
+
+.setting_bt {
+    width: 4%;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    right: 0;
+    border: none;
+    background-color: transparent;
+    img{
+        width: 100%;
     }
 }
 
 .user_post {
+    border-top: 1px solid gray;
+    padding-top: 30px;
     width: 100%;
     height: 400px;
     display: flex;
+    .new_post_bt {
+        width: 24%;
+        height: 80%;
+        margin: 1%;
+        background-color: transparent;
+        border: 0.1px solid rgba(184, 184, 184, 0.7);
+        img {
+            width: 20%;
+            cursor: pointer;
+        }
+    }
     .up_title {
         font-size: 17px;
         font-weight: 550;
@@ -71,7 +92,8 @@
 
 .up_wrap {
     width: 24%;
-    padding: 1%;
+    height: 80%;
+    margin: 0.5%;
     cursor: pointer;
 }
 
