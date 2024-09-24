@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents } from "../redux/actions/postActions";
 import { Navigation } from 'swiper/modules';
 import { useNavigate } from "react-router-dom";
-import { AddPlan } from "./handlePlan";
-import fetchLocations from "./fetchLoc";
 import PostMap from "./postMap";
 import '../css/postList.css';
 import 'swiper/css';
@@ -84,7 +82,6 @@ const PostList = ({ post }) => {
                                         <img
                                             src={con.img_src}
                                         />
-                                        {console.log(con)}
                                         <div className="loc_map" onClick={() => { handleMapDetail(con.address) }}>
                                             <PostMap content={con} />
                                             <div className="loc_info">

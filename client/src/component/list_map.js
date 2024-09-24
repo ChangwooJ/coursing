@@ -16,10 +16,10 @@ const ListMap = () => {
     const [locations, setLocations] = useState([]);
     const { positions } = useContext(PositionsContext);
     const { location } = useContext(LocationContext);
-    const { option, markers } = useFetchMaps({content: positions});
+    const { option, markers } = useFetchMaps({ content: positions });
 
     useEffect(() => {
-        if(location !== null && map) {
+        if (location !== null && map) {
             movePlanPosition();
         }
     }, [location]);
@@ -63,17 +63,17 @@ const ListMap = () => {
             strokeOpacity: 0.7,
             strokeStyle: 'solid'
         });
-    
+
         polyline.setMap(map);
         return polyline;
     };
-        
+
     // 마커의 위치를 저장
     const position = locations.map(loc => loc.latlng);
 
     // 선 그리기
     const polyline = createPolyline(mapRef.current, position);
-    
+
     const movePlanPosition = () => {
         map.panTo(location);
     }
@@ -103,10 +103,10 @@ const ListMap = () => {
     }
 
     return (
-        <React.Fragment>
+        <div className="list_map_wrap">
             <div className="map" ref={mapContainerRef}></div>
             <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
-        </React.Fragment>
+        </div>
     );
 };
 

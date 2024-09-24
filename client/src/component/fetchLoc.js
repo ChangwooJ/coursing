@@ -6,7 +6,7 @@ const fetchLocations = async (lists) => {
     const api_key = process.env.REACT_APP_API_KEY;
 
     const listsArray = Array.isArray(lists) ? lists : [lists];
-    console.log(lists);
+    
     const locationsPromises = listsArray.map(async (list) => {
         if (list.address) {
             try {

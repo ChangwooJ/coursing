@@ -4,7 +4,7 @@
     height: 100%;
 }
 
-.search_wrap {
+.list_map_wrap .search_wrap {
     position: absolute;
     left: 35%;
     top: 3%;
@@ -43,4 +43,5 @@
 .map_wrap {
     width: 100%;
     height: 100vh;
+    z-index: 3;
 }

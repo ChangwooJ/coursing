@@ -3,8 +3,13 @@
     padding: 0;
 }
 
+.list_map_wrap {
+    width: 100%;
+    height: 100vh;
+}
+
 .map_wrap { 
     position: relative; 
     width: 100%; 
-    height: 100vh;
+    height: 100%;
 }
