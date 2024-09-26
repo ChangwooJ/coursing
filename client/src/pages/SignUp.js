@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import "../css/SignUp.css";
-import SignUpComp from "../component/signup";
-import EmailCert from "../component/emailCert";
+import SignUpComp from "../component/Auth/signup";
+import EmailCert from "../component/Auth/emailCert";
 
 const SignUp = () => {
     const [loginData, setLoginData] = useState({

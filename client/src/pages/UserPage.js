@@ -1,5 +1,5 @@
 import React from "react";
-import User_Page from "../component/user_page.js";
+import User_Page from "../component/UserPage/user_page.js";
 
 const MyPage = () => {
 

@@ -1,17 +1,39 @@
-import React, { useState } from "react";
-import TitleSelect from "../component/titleSelect";
-import NewPost from "../component/newPost";
+import React, { useEffect, useState } from "react";
+import TitleSelect from "../component/etc/titleSelect";
+import NewPost from "../component/CreatePosts/newContent";
 
 import "../css/CreatePost.css";
+import PreviewPost from "../component/CreatePosts/previewPost";
 
 const CreatePostPage = () => {
     const [ContentId, setContentId] = useState(1);
     const [view, setView] = useState(true);
+    const [newCon, setNewCon] = useState(true);
     const [state, setState] = useState(false);
+    const [contents, setContents] = useState([]);
+    const [firstCon, setFirstCon] = useState(false);
+
+    /*
+    useEffect(()=>{
+        console.log("contents: ", contents);
+    }, [contents])
+    */
 
     const handleNewPost = (state) => {
         setView(false);
         setState(state);
+    }
+
+    const handleSaveContent = (data, image) => {
+        const contentWithImage = {
+            ...data,
+            image
+        };
+        setContents(prevContents => {
+            const updatedContents = [...prevContents, contentWithImage];
+            return updatedContents.sort((a, b) => a.start_time - b.start_time);
+        });
+        setFirstCon(true);
     }
 
     return (
@@ -31,8 +53,11 @@ const CreatePostPage = () => {
                     </div>
                 </div>
             )}
-            {!view && (
-                <NewPost id={ContentId} state={state} />
+            {!view && firstCon && (
+                <PreviewPost content={contents} />
+            )}
+            {!view && newCon && (
+                <NewPost id={ContentId} setNewCon={setNewCon} onSaveContent={handleSaveContent}/>
             )}
         </React.Fragment>
     )

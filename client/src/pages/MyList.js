@@ -1,5 +1,5 @@
 import React from "react";
-import ListMap from "../component/list_map";
+import ListMap from "../component/MyList/list_map";
 import "../css/mylist.css";
 
 const MyList = () => {

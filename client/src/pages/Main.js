@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../redux/actions/postActions";
-import PostList from "../component/postList";
+import PostList from "../component/Main/postList";
 import '../css/Main.css';
 import "../css/mylist.css";
 
