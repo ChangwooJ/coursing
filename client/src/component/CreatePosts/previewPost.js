@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import useFetchMaps from "../etc/fetchMaps";
 import fetchLocations from "../etc/fetchLoc";
+import axios from "axios";
 
 const { kakao } = window;
 
@@ -9,6 +10,21 @@ const PreviewPost = ({ content }) => {
     const mapRef = useRef(null);
     const [overlayIdx, setOverlayIdx] = useState(0);
     const { option, markers, overlays } = useFetchMaps({ content: content });
+    const [category, setCategory] = useState([]);
+
+    //카테고리 이미지 경로 로드
+    useEffect(() => {
+        const fetchCategory = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/category`);  // 예시 API
+                setCategory(response.data);
+            } catch (error) {
+                console.error("Error fetching category:", error);
+            }
+        };
+
+        fetchCategory();
+    }, []);
 
     useEffect(() => {
         if (mapContainerRef.current && option.center && markers.length > 0) {
@@ -17,7 +33,7 @@ const PreviewPost = ({ content }) => {
             markers.forEach(marker => marker.setMap(map));  //마커 설정
             overlays.forEach(overlay => overlay.setMap(null));  //오버레이 설정
         }
-        console.log(content);
+        //console.log(content);
     }, [option, markers]);
 
     //오버레이 옵션
@@ -50,23 +66,38 @@ const PreviewPost = ({ content }) => {
 
     }
 
+    const AddContent = () => {
+
+    }
+
     return (
         <React.Fragment>
             <div className="prePost_bar">
                 {content.map((con, index) => {
-                    <React.Fragment key={index}>
-                        <div onClick={() => handlePosition(con, index)}>
-                            <p>{con.name}</p>
-                            <img src={con.cate_img_src} style={{ width: '20px' }} />
-                        </div>
-                        <button className="deleteContent" onClick={() => DeleteContent(con)}>-</button>
-                        {index < content.length - 1 && (
-                            Array(3).fill().map((_, i) => (
-                                <img key={i} src="/img/하늘원.png" />
-                            ))
-                        )}
-                    </React.Fragment>
+                    var categoryID = con.cate_id;
+                    return (
+                        <>
+                            <div>
+                                <div onClick={() => handlePosition(con, index)}>
+                                    <p>{con.name}</p>
+                                    <img src={category[categoryID]?.cate_img_src} style={{ width: '20px' }} />
+                                </div>
+                                <button className="deleteContent" onClick={() => DeleteContent(con)}>-</button>
+                            </div>
+                            {index < content.length - 1 && (
+                                Array(3).fill().map((_, i) => (
+                                    <img key={i} src="/img/하늘원.png" />
+                                ))
+                            )}
+                        </>
+                    )
                 })}
+                <div className="seperator">
+                    {Array(3).fill().map((_, i) => (
+                        <img key={i} src="/img/하늘원.png" />
+                    ))}
+                </div>
+                <button className="addContent" onClick={() => AddContent()}>+</button>
             </div>
             <div className="prePost_map">
                 <div className="map" ref={mapContainerRef} ></div>
