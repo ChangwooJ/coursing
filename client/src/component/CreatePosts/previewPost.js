@@ -5,7 +5,7 @@ import axios from "axios";
 
 const { kakao } = window;
 
-const PreviewPost = ({ content }) => {
+const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const [overlayIdx, setOverlayIdx] = useState(0);
@@ -62,12 +62,20 @@ const PreviewPost = ({ content }) => {
         }
     }
 
-    const DeleteContent = () => {
-
+    const DeleteContent = (con) => {
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            onDeleteContent(con);
+        } else {
+            console.log("삭제 취소");
+        }
     }
 
     const AddContent = () => {
+        setNewCon(true);
+    }
 
+    const FinMakePost = () => {
+        //업로드 의사를 전송하고 브라우저에서 백엔드단으로 정보전송처리.
     }
 
     return (
@@ -85,9 +93,11 @@ const PreviewPost = ({ content }) => {
                                 <button className="deleteContent" onClick={() => DeleteContent(con)}>-</button>
                             </div>
                             {index < content.length - 1 && (
-                                Array(3).fill().map((_, i) => (
-                                    <img key={i} src="/img/하늘원.png" />
-                                ))
+                                <div className="seperator">
+                                    {Array(3).fill().map((_, i) => (
+                                            <img key={i} src="/img/하늘원.png" />
+                                    ))}
+                                </div>
                             )}
                         </>
                     )
@@ -98,6 +108,7 @@ const PreviewPost = ({ content }) => {
                     ))}
                 </div>
                 <button className="addContent" onClick={() => AddContent()}>+</button>
+                <button className="finMakePost" onClick={() => FinMakePost()}>업로드</button>
             </div>
             <div className="prePost_map">
                 <div className="map" ref={mapContainerRef} ></div>

@@ -57,22 +57,31 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
     }
 
     //컨텐츠 업로드
-    const handleContentSave = () => {
-        const temp_start = document.querySelector(".start_time").value;
-        const temp_end = document.querySelector(".end_time").value;
-        const newData = {
-            content: text,
-            preview: preview,
-            address: loc.address_name,
-            cate_id: document.querySelector("select").selectedIndex,
-            start_time: temp_start,
-            end_time: temp_end,
-            name: document.querySelector(".place").value,
-            img_src: preview,
-        };
+    const handleContentSave = (prev) => {
+        if(prev){
+            setContentWrite(false);
+            setMapWrite(true);
+            setSearchPosition(false);
+            setText("");
+        }
+        else if(!prev){
+            const temp_start = document.querySelector(".start_time").value;
+            const temp_end = document.querySelector(".end_time").value;
+            const newData = {
+                content: text,
+                preview: preview,
+                address: loc.address_name,
+                cate_id: document.querySelector("select").selectedIndex,
+                start_time: temp_start,
+                end_time: temp_end,
+                name: document.querySelector(".place").value,
+                img_src: preview,
+            };
+    
+            onSaveContent(newData, image);
+            setNewCon(false);
 
-        onSaveContent(newData, image);
-        setNewCon(false);
+        }
     }
 
     const handleReset = () => {
@@ -88,7 +97,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
         <div className="create_post_wrap">
             <div className="upload_img">
                 {upload && (
-                    <input type="file" accept="image/*" onChange={handleImg} />
+                    <input type="file" accept="image/*" className="upload_img_input" onChange={handleImg} />
                 )}
                 {preview && (
                     <div className="preview">
@@ -107,7 +116,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
                         {searchPosition && (
                             <>
                                 <div className="map" ref={mapContainerRef} style={{ width: "450px", height: "400px" }}></div>
-                                <button className="next" onClick={() => handleNext()}>다음</button>
+                                <button className="next" onClick={() => handleNext()}>next</button>
                             </>
                         )}
                     </div>
@@ -137,7 +146,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
                             <input type="text" placeholder="00" className="end_time" />
                         </p>
                         <div className="content_bt">
-                            <button className="content_prev bt">이전</button>
+                            <button className="content_prev bt" onClick={() => handleContentSave(true)}>이전</button>
                             <button className="content_next bt" onClick={() => handleContentSave()}>완료</button>
                         </div>
                     </div>

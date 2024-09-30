@@ -9,15 +9,9 @@ const CreatePostPage = () => {
     const [ContentId, setContentId] = useState(1);
     const [view, setView] = useState(true);
     const [newCon, setNewCon] = useState(true);
-    const [state, setState] = useState(false);
+    const [state, setState] = useState(false);  //기존/새 일정 구분
     const [contents, setContents] = useState([]);
     const [firstCon, setFirstCon] = useState(false);
-
-    /*
-    useEffect(()=>{
-        console.log("contents: ", contents);
-    }, [contents])
-    */
 
     const handleNewPost = (state) => {
         setView(false);
@@ -35,6 +29,10 @@ const CreatePostPage = () => {
         });
         setFirstCon(true);
     }
+
+    const handleDeleteContent = (con) => {
+        setContents(prevContents => prevContents.filter(item => item !== con));
+    };
 
     return (
         <React.Fragment>
@@ -54,7 +52,11 @@ const CreatePostPage = () => {
                 </div>
             )}
             {!view && firstCon && (
-                <PreviewPost content={contents} />
+                <PreviewPost 
+                    content={contents} 
+                    setNewCon={setNewCon} 
+                    onDeleteContent={handleDeleteContent} 
+                />
             )}
             {!view && newCon && (
                 <NewPost id={ContentId} setNewCon={setNewCon} onSaveContent={handleSaveContent}/>

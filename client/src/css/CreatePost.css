@@ -36,14 +36,17 @@
 }
 
 .create_post_wrap {
-    position: relative;
+    position: absolute;
     box-sizing: border-box;
-    width: 80%;
-    height: 100vh;
-    margin: 0 0 0 20%;
-    z-index: 4;
+    width: 60%;
+    height: 70vh;
+    margin: 15vh 0 0 30%;
+    z-index: 7;
+    top: 0;
     display: flex;
-    background-color: rgba(256, 256, 256, 0.1);
+    background-color: rgba(200, 200, 200, 0.4);
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .upload_img {
@@ -54,15 +57,24 @@
     justify-content: center;
 }
 
+.upload_img_input {
+    width: fit-content;
+    padding: 1%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 2px black;
+}
+
 .preview {
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.3);
-    width: 15%;
-    height: 30%;
+    width: 35%;
+    height: 75%;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    background-color: rgba(256, 256, 256, 0.9);
+    border-radius: 5px;
     .next {
         position: absolute;
         right: 10px;
@@ -93,7 +105,7 @@
 
 .map_write {
     margin-left: 2%;
-    width: 40%;
+    width: 50%;
     height: fit-content;
 
     .search_wrap {
@@ -112,10 +124,11 @@
             height: 100%;
             border: none;
             background-color: transparent;
-
+            
             img {
-                width: 50%;
+                width: 60%;
                 height: 50%;
+                cursor: pointer;
             }
         }
     }
@@ -123,20 +136,39 @@
     .map {
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
     }
+
+    .next {
+        color: white;
+        font-weight: 550;
+        font-size: 16px;
+        position: absolute;
+        bottom: 30px;
+        right: 10%;
+        z-index: 5;
+        width: 8%;
+        height: 30px;
+        background-color: rgb(96, 189, 255);
+        border-radius: 5px;
+        border: 1px solid gray;
+        cursor: pointer;
+    }
 }
 
 .content {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-    width: 25%;
-    height: 50%;
-    margin-left: 2%;
+    width: 32%;
+    height: 73%;
+    margin-left: 0.5%;
     text-align: center;
-
+    background-color: white;
+    border-radius: 5px;
+    padding: 0.5%;
     .place {
         box-sizing: border-box;
         width: 68%;
         height: 8%;
         margin: 2% 1% 2% 1.5%;
+        text-indent: 5px;
     }
 
     select {
@@ -149,6 +181,11 @@
     textarea {
         width: 97%;
         height: 66%;
+        text-indent: 5px;
+        padding-top: 5px;
+        resize: none;
+        border: none;
+        box-shadow: 0 0 0.5px black;
     }
 
     p {
