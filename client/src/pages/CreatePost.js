@@ -32,7 +32,11 @@ const CreatePostPage = () => {
 
     const handleDeleteContent = (con) => {
         setContents(prevContents => prevContents.filter(item => item !== con));
-    };
+    }
+
+    const handleUploadPost = () => {
+        console.log(contents);
+    }
 
     return (
         <React.Fragment>
@@ -56,6 +60,7 @@ const CreatePostPage = () => {
                     content={contents} 
                     setNewCon={setNewCon} 
                     onDeleteContent={handleDeleteContent} 
+                    onUploadPost={handleUploadPost}
                 />
             )}
             {!view && newCon && (

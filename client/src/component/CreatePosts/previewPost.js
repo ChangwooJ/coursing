@@ -1,16 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import useFetchMaps from "../etc/fetchMaps";
 import fetchLocations from "../etc/fetchLoc";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const { kakao } = window;
 
-const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
+const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const [overlayIdx, setOverlayIdx] = useState(0);
     const { option, markers, overlays } = useFetchMaps({ content: content });
     const [category, setCategory] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [finState, setFinState] = useState(false);
+    const { loading, userInfo } = useContext(AuthContext);
 
     //카테고리 이미지 경로 로드
     useEffect(() => {
@@ -62,6 +66,15 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
         }
     }
 
+    // 카테고리 클릭 시 선택 처리
+    const handleCategoryClick = (index) => {
+        if (selectedCategories.includes(index)) {
+            setSelectedCategories(selectedCategories.filter((item) => item !== index));
+        } else if (selectedCategories.length < 3) {
+            setSelectedCategories([...selectedCategories, index]);
+        }
+    };
+
     const DeleteContent = (con) => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
             onDeleteContent(con);
@@ -70,12 +83,31 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
         }
     }
 
-    const AddContent = () => {
-        setNewCon(true);
+    const handleUploadPost = async () => {
+        try {
+            const title = document.querySelector('.upload_post_title').value;
+            const response = await axios.post('http://localhost:8000/api/upload_post', {
+                title,
+                writer_id: userInfo[0].user_id
+            });
+            const postId = response.data.post_id;
+
+            await Promise.all(selectedCategories.map(async (sel) => {
+                const categoryId = sel + 1;
+                await axios.post('http://localhost:8000/api/upload_PC', {
+                    post_id: postId,
+                    category_id: categoryId
+                });
+            }));
+            onUploadPost();
+            alert("업로드 하였습니다.");
+        } catch (error) {
+            console.error('Error uploading post:', error);
+        }
     }
 
-    const FinMakePost = () => {
-        //업로드 의사를 전송하고 브라우저에서 백엔드단으로 정보전송처리.
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -95,7 +127,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
                             {index < content.length - 1 && (
                                 <div className="seperator">
                                     {Array(3).fill().map((_, i) => (
-                                            <img key={i} src="/img/하늘원.png" />
+                                        <img key={i} src="/img/하늘원.png" />
                                     ))}
                                 </div>
                             )}
@@ -107,9 +139,41 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent }) => {
                         <img key={i} src="/img/하늘원.png" />
                     ))}
                 </div>
-                <button className="addContent" onClick={() => AddContent()}>+</button>
-                <button className="finMakePost" onClick={() => FinMakePost()}>업로드</button>
+                <button className="addContent" onClick={() => { setNewCon(true); }}>+</button>
+                <button className="finMakePost" onClick={() => { setFinState(true); }}>업로드</button>
             </div>
+            {finState && (
+                <div className="upload_info_wrap">
+                    <div className="upload_info">
+                        <h2 className="title_title">포스트 타이틀</h2>
+                        <input type="text" placeholder="title" className="upload_post_title" />
+                        <p className="pc_list">포스트의 카테고리를 선택해주세요. (최대 3개)</p>
+                        <div className="category_tag_list">
+                            {category.map((cate, index) => {
+                                const isSelected = selectedCategories.includes(index);
+                                return (
+                                    <p
+                                        className={`cate_tags ${isSelected ? "selected" : ""}`}
+                                        onClick={() => handleCategoryClick(index)}
+                                    >
+                                        {cate.category_name}
+                                    </p>
+                                )
+                            })}
+                        </div>
+                        <button className="upload_info_reset"
+                            onClick={() => {
+                                setFinState(false);
+                                setSelectedCategories([]);
+                            }
+                            }
+                        >
+                            취소
+                        </button>
+                        <button className="upload_info_fin" onClick={() => handleUploadPost()}>완료</button>
+                    </div>
+                </div>
+            )}
             <div className="prePost_map">
                 <div className="map" ref={mapContainerRef} ></div>
             </div>

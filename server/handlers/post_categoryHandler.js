@@ -17,4 +17,19 @@ const getPCList = (req, res) => {
     })
 };
 
-module.exports = getPCList;
+const postPC = (req, res) => {
+    const { post_id, category_id } = req.body;
+    const query = `
+    INSERT coursing.post_category (category_id, post_id) VALUES (?, ?)
+    ;`;
+
+    db.query(query, [post_id, category_id], (err, result) => {
+        if (err) {
+            console.error('Error inserting PC:', err);
+            return res.status(500).json({ message: 'Error inserting PC' });
+        }
+        res.status(201).json({ message: 'PC created successfully'});
+    });
+}
+
+module.exports = {getPCList, postPC};

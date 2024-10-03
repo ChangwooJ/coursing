@@ -71,7 +71,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
                 content: text,
                 preview: preview,
                 address: loc.address_name,
-                cate_id: document.querySelector("select").selectedIndex,
+                cate_id: (document.querySelector("select").selectedIndex - 1),
                 start_time: temp_start,
                 end_time: temp_end,
                 name: document.querySelector(".place").value,
@@ -101,7 +101,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
                 )}
                 {preview && (
                     <div className="preview">
-                        <img src={preview} style={{ width: "100px" }} />
+                        <img src={preview} style={{ width: "230px" }} />
                         {!mapWrite && (
                             <>
                             <button className="prev" onClick={() => handleReset()}><img src="/img/이전.png" /></button>

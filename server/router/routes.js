@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const {getPostList, getPostContent} = require('../handlers/postHandler');
+const {getPostList, getPostContent, postPost} = require('../handlers/postHandler');
 const {getList, postList, deleteList, getTitle} = require('../handlers/listHandler');
 const {postLogin, postLogout, getLogged} = require('../handlers/authHandler');
 const getUCList = require('../handlers/user_categoryHandler');
-const getPCList = require('../handlers/post_categoryHandler');
+const {getPCList, postPC} = require('../handlers/post_categoryHandler');
 const {getUser, postUser} = require('../handlers/userHandler');
 const {postEmail, postCode} = require('../handlers/emailCertHandler');
 const getCategory = require('../handlers/categoryHandler');
@@ -21,6 +21,8 @@ router.get('/PC', getPCList);
 router.post('/add_plan', postList);
 router.delete('/delete_plan', deleteList);
 router.get('/category', getCategory);
+router.post('/upload_post', postPost);
+router.post('/upload_PC', postPC);
 
 router.post('/login', postLogin);
 router.post('/logout', postLogout);

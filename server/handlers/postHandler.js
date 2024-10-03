@@ -36,4 +36,21 @@ const getPostContent = (req, res) => {
     })
 }
 
-module.exports = {getPostList, getPostContent};
+const postPost = (req, res) => {
+    const { title, writer_id } = req.body;
+    const date = new Date();
+
+    const query = `
+    INSERT INTO coursing.post (title, writer_id, date) VALUES (?, ?, ?)
+    ;`;
+
+    db.query(query, [title, writer_id, date], (err, result) => {
+        if (err) {
+            console.error('Error inserting post:', err);
+            return res.status(500).json({ message: 'Error inserting post' });
+        }
+        res.status(201).json({ message: 'Post created successfully', post_id: result.insertId });
+    });
+}
+
+module.exports = {getPostList, getPostContent, postPost};
