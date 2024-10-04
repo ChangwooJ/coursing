@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TitleSelect from "../component/etc/titleSelect";
 import NewPost from "../component/CreatePosts/newContent";
 
 import "../css/CreatePost.css";
 import PreviewPost from "../component/CreatePosts/previewPost";
+import axios from "axios";
 
 const CreatePostPage = () => {
     const [ContentId, setContentId] = useState(1);
@@ -34,8 +35,39 @@ const CreatePostPage = () => {
         setContents(prevContents => prevContents.filter(item => item !== con));
     }
 
-    const handleUploadPost = () => {
-        console.log(contents);
+    const handleUploadPost = async (postId) => {
+        console.log("Received postId in CreatePostPage:", contents);
+        try {
+            for (const content of contents) {
+                if (content.image) {
+                    const formData = new FormData();
+                    formData.append('image', content.image); // 폼에 이미지 파일 추가
+    
+                    const response = await axios.post('http://localhost:8000/api/upload_image', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    
+                    content._post_id = postId;
+                    content.img_src = response.data.img_src;
+                    content.cate_id += 1;
+
+                    const fin_upload = await axios.post('http://localhost:8000/api/fin_upload', {
+                        _post_id: content._post_id,
+                        content: content.content,
+                        img_src: content.img_src,
+                        address: content.address,
+                        cate_id: content.cate_id,
+                        start_time: content.start_time,
+                        end_time: content.end_time,
+                        name: content.name
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error uploading post: ', error);
+        }
     }
 
     return (

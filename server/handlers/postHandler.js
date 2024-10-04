@@ -53,4 +53,29 @@ const postPost = (req, res) => {
     });
 }
 
-module.exports = {getPostList, getPostContent, postPost};
+const uploadPostContent = (req, res) => {
+    const {_post_id, content, img_src, address, cate_id, start_time, end_time, name} = req.body;
+    const query = `
+    INSERT INTO coursing.post_content
+    (_post_id, content, img_src, address, cate_id, start_time, end_time, name)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ;`;
+    const params = [_post_id, content, img_src, address, cate_id, start_time, end_time, name];
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error('Error inserting content:', err);
+            return res.status(500).json({ message: 'Error inserting content' });
+        }
+        res.status(201).json({ message: 'Post created successfully'});
+    });
+}
+
+const uploadImg = (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    const imagePath = `/img/${req.file.filename}`;  // 클라이언트에서 접근 가능한 경로
+    res.json({ img_src: imagePath });
+}
+
+module.exports = {getPostList, getPostContent, postPost, uploadImg, uploadPostContent};

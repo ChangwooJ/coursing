@@ -99,7 +99,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
                     category_id: categoryId
                 });
             }));
-            onUploadPost();
+            onUploadPost(postId);
             alert("업로드 하였습니다.");
         } catch (error) {
             console.error('Error uploading post:', error);
@@ -170,7 +170,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
                         >
                             취소
                         </button>
-                        <button className="upload_info_fin" onClick={() => handleUploadPost()}>완료</button>
+                        <button className="upload_info_fin" type="button" onClick={() => handleUploadPost()}>완료</button>
                     </div>
                 </div>
             )}

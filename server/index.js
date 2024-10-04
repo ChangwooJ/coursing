@@ -4,13 +4,18 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8000;
 const router = require('./router/routes');
 const FileStore = require('session-file-store')(session);
+const bodyParser = require('body-parser');
 const passport = require('passport');
 const app = express();
 
 const corsOptions = {
     origin: 'http://localhost:3000', // 클라이언트 도메인
     credentials: true, // 인증 정보 포함 허용
-  };
+};
+
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(cors(corsOptions));
 app.use(express.json());

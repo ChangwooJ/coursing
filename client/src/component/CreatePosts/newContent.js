@@ -68,6 +68,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
             const temp_start = document.querySelector(".start_time").value;
             const temp_end = document.querySelector(".end_time").value;
             const newData = {
+                _post_id: null,
                 content: text,
                 preview: preview,
                 address: loc.address_name,

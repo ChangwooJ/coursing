@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../configs/uploadImgConfig');
 
-const {getPostList, getPostContent, postPost} = require('../handlers/postHandler');
+const {getPostList, getPostContent, postPost, uploadImg, uploadPostContent} = require('../handlers/postHandler');
 const {getList, postList, deleteList, getTitle} = require('../handlers/listHandler');
 const {postLogin, postLogout, getLogged} = require('../handlers/authHandler');
 const getUCList = require('../handlers/user_categoryHandler');
@@ -23,6 +24,9 @@ router.delete('/delete_plan', deleteList);
 router.get('/category', getCategory);
 router.post('/upload_post', postPost);
 router.post('/upload_PC', postPC);
+router.post('/fin_upload', uploadPostContent);
+
+router.post('/upload_image', upload.single('image'), uploadImg);
 
 router.post('/login', postLogin);
 router.post('/logout', postLogout);

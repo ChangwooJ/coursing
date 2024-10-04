@@ -23,7 +23,7 @@ const postPC = (req, res) => {
     INSERT coursing.post_category (category_id, post_id) VALUES (?, ?)
     ;`;
 
-    db.query(query, [post_id, category_id], (err, result) => {
+    db.query(query, [category_id, post_id], (err, result) => {
         if (err) {
             console.error('Error inserting PC:', err);
             return res.status(500).json({ message: 'Error inserting PC' });
