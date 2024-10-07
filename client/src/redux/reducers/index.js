@@ -6,6 +6,7 @@ import titleReducer from './titleReducer';
 import UCReducer from './UCReducer';
 import PCReducer from './PCReducer';
 import userReducer from './userReducer';
+import userContentReducer from './userContentReducer';
 
 const rootReducer = combineReducers({
   posts: postReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   users: userReducer,
   UC: UCReducer,
   PC: PCReducer,
+  user_contents: userContentReducer,
 });
 
 export default rootReducer;

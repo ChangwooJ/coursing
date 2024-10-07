@@ -3,7 +3,7 @@ import Search from "../MyList/search";
 
 const { kakao } = window;
 
-const NewPost = ({ id, setNewCon, onSaveContent }) => {
+const NewPost = ({ setNewCon, onSaveContent }) => {
     const mapContainerRef = useRef(null);
     const [upload, setUpload] = useState(true);
     const [image, setImage] = useState(null);
@@ -72,7 +72,7 @@ const NewPost = ({ id, setNewCon, onSaveContent }) => {
                 content: text,
                 preview: preview,
                 address: loc.address_name,
-                cate_id: (document.querySelector("select").selectedIndex - 1),
+                cate_id: document.querySelector("select").selectedIndex,
                 start_time: temp_start,
                 end_time: temp_end,
                 name: document.querySelector(".place").value,

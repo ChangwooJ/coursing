@@ -1,22 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TitleSelect from "../component/etc/titleSelect";
 import NewPost from "../component/CreatePosts/newContent";
 
 import "../css/CreatePost.css";
 import PreviewPost from "../component/CreatePosts/previewPost";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserContents } from "../redux/actions/userContentActions";
 
 const CreatePostPage = () => {
+    const dispatch = useDispatch();
     const [ContentId, setContentId] = useState(1);
     const [view, setView] = useState(true);
     const [newCon, setNewCon] = useState(true);
     const [state, setState] = useState(false);  //기존/새 일정 구분
     const [contents, setContents] = useState([]);
     const [firstCon, setFirstCon] = useState(false);
+    const post_contents = useSelector(state => state.user_contents.user_contents);
+
+    console.log(post_contents);
+    useEffect(() => {
+        const fetch = () => {
+            dispatch(fetchUserContents());
+        };
+        fetch();
+    }, [dispatch])
+
+    useEffect(() => {
+        const filteredContents = post_contents.filter(c => c.content_id === ContentId);
+        setContents(filteredContents);
+    }, [post_contents, ContentId]);
 
     const handleNewPost = (state) => {
         setView(false);
         setState(state);
+        if(state) {
+            setFirstCon(true);
+            setNewCon(false);
+        }
     }
 
     const handleSaveContent = (data, image) => {
@@ -96,7 +117,7 @@ const CreatePostPage = () => {
                 />
             )}
             {!view && newCon && (
-                <NewPost id={ContentId} setNewCon={setNewCon} onSaveContent={handleSaveContent}/>
+                <NewPost setNewCon={setNewCon} onSaveContent={handleSaveContent}/>
             )}
         </React.Fragment>
     )

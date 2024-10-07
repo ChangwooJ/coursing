@@ -37,6 +37,23 @@ const postList = (req, res) => {
     })
 }
 
+const getUserContentList = (req, res) => {
+    const query = `
+    SELECT address, name, content_id, category AS cate_id, start_time, end_time
+    FROM coursing.user_content_list;
+    ;`;
+
+    db.query(query, (err, result)=>{
+        if(err) {
+            res.status(500).send(err);
+            console.log(err);
+        } else {
+            res.send(result);
+            console.log(result);
+        }
+    })
+}
+
 const deleteList = (req, res) => {
     const { list_id } = req.body;
 
@@ -73,4 +90,4 @@ const getTitle = (req, res) => {
     })
 }
 
-module.exports = { getList, postList, deleteList, getTitle };
+module.exports = { getList, postList, getUserContentList, deleteList, getTitle };

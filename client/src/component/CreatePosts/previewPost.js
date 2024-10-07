@@ -15,7 +15,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [finState, setFinState] = useState(false);
     const { loading, userInfo } = useContext(AuthContext);
-
+console.log(content);
     //카테고리 이미지 경로 로드
     useEffect(() => {
         const fetchCategory = async () => {
@@ -120,7 +120,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
                             <div>
                                 <div onClick={() => handlePosition(con, index)}>
                                     <p>{con.name}</p>
-                                    <img src={category[categoryID]?.cate_img_src} style={{ width: '20px' }} />
+                                    <img src={category[categoryID - 1]?.cate_img_src} style={{ width: '20px' }} />
                                 </div>
                                 <button className="deleteContent" onClick={() => DeleteContent(con)}>-</button>
                             </div>
