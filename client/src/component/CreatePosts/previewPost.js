@@ -6,21 +6,25 @@ import { AuthContext } from "../../context/AuthContext";
 
 const { kakao } = window;
 
-const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost }) => {
+const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost, onhandleChangeInfo }) => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const [overlayIdx, setOverlayIdx] = useState(0);
-    const { option, markers, overlays } = useFetchMaps({ content: content });
     const [category, setCategory] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [finState, setFinState] = useState(false);
     const { loading, userInfo } = useContext(AuthContext);
-console.log(content);
+
+    const handleImgClick = (con) => {
+        onhandleChangeInfo(con);
+    }
+    const { option, markers, overlays } = useFetchMaps({ content: content, onImgClick: handleImgClick });
+    
     //카테고리 이미지 경로 로드
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/category`);  // 예시 API
+                const response = await axios.get(`http://localhost:8000/api/category`);
                 setCategory(response.data);
             } catch (error) {
                 console.error("Error fetching category:", error);
@@ -37,7 +41,6 @@ console.log(content);
             markers.forEach(marker => marker.setMap(map));  //마커 설정
             overlays.forEach(overlay => overlay.setMap(null));  //오버레이 설정
         }
-        //console.log(content);
     }, [option, markers]);
 
     //오버레이 옵션
@@ -84,6 +87,19 @@ console.log(content);
     }
 
     const handleUploadPost = async () => {
+        for (const [index, con] of content.entries()) {
+            if (!con.image || !con.content) {
+                alert("아직 작성하지 않은 컨텐츠가 존재합니다.");
+                setFinState(false);
+                setSelectedCategories([]);
+                setOverlayIdx(index);
+                const loc = await fetchLocations(con);
+                if (mapRef.current) {
+                    mapRef.current.panTo(loc[0].latlng);
+                }
+                return;
+            }
+        }
         try {
             const title = document.querySelector('.upload_post_title').value;
             const response = await axios.post('http://localhost:8000/api/upload_post', {
@@ -100,7 +116,6 @@ console.log(content);
                 });
             }));
             onUploadPost(postId);
-            alert("업로드 하였습니다.");
         } catch (error) {
             console.error('Error uploading post:', error);
         }

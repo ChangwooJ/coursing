@@ -23,7 +23,6 @@ const Search = ({ setLoc, setSearchPosition }) => {
             if (status === window.kakao.maps.services.Status.OK) {
                 setLoc(data[0]);
                 setSearchPosition(new kakao.maps.LatLng(data[0].y, data[0].x));
-                console.log(data[0]);
             } else {
                 alert('검색 결과가 없습니다.');
             }

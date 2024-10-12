@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useContext } from "react";
+import { useEffect, useMemo, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLists } from "../../redux/actions/listActions";
 import { AuthContext } from '../../context/AuthContext';

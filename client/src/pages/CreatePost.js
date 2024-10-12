@@ -16,9 +16,9 @@ const CreatePostPage = () => {
     const [state, setState] = useState(false);  //기존/새 일정 구분
     const [contents, setContents] = useState([]);
     const [firstCon, setFirstCon] = useState(false);
+    const [clickedContent, setClickedContent] = useState(null);
     const post_contents = useSelector(state => state.user_contents.user_contents);
 
-    console.log(post_contents);
     useEffect(() => {
         const fetch = () => {
             dispatch(fetchUserContents());
@@ -46,10 +46,30 @@ const CreatePostPage = () => {
             image
         };
         setContents(prevContents => {
-            const updatedContents = [...prevContents, contentWithImage];
-            return updatedContents.sort((a, b) => a.start_time - b.start_time);
+            const existingIndex = prevContents.findIndex(item => item.address === data.address);    //주소가 겹치는 경우
+            let overlapTime = false;    //방문 시간대가 겹치는 경우
+            const con = existingIndex !== -1 ? prevContents.filter((_, index) => index !== existingIndex) : prevContents;
+
+            const newStart = new Date(data.start_time).getTime();
+            const newEnd = new Date(data.end_time).getTime();
+
+            con.forEach(prev => {
+                const prevStart = new Date(prev.start_time).getTime();
+                const prevEnd = new Date(prev.end_time).getTime();
+                if (newStart < prevEnd && newEnd > prevStart) {
+                    overlapTime = true;
+                }
+            });
+
+            if(!overlapTime){
+                const updatedContents = [...con, contentWithImage];
+                setFirstCon(true);
+                return updatedContents.sort((a, b) => a.start_time - b.start_time);
+            } else {
+                alert("시간이 겹치는 일정이 있습니다.");
+                return prevContents;
+            }
         });
-        setFirstCon(true);
     }
 
     const handleDeleteContent = (con) => {
@@ -57,9 +77,8 @@ const CreatePostPage = () => {
     }
 
     const handleUploadPost = async (postId) => {
-        console.log("Received postId in CreatePostPage:", contents);
         try {
-            for (const content of contents) {
+            const uploadPromises = contents.map(async (content) => {
                 if (content.image) {
                     const formData = new FormData();
                     formData.append('image', content.image); // 폼에 이미지 파일 추가
@@ -74,7 +93,7 @@ const CreatePostPage = () => {
                     content.img_src = response.data.img_src;
                     content.cate_id += 1;
 
-                    const fin_upload = await axios.post('http://localhost:8000/api/fin_upload', {
+                    await axios.post('http://localhost:8000/api/fin_upload', {
                         _post_id: content._post_id,
                         content: content.content,
                         img_src: content.img_src,
@@ -84,11 +103,20 @@ const CreatePostPage = () => {
                         end_time: content.end_time,
                         name: content.name
                     });
+
                 }
-            }
+            })
+            await Promise.all(uploadPromises);
+
+            alert("업로드 하였습니다.");
         } catch (error) {
             console.error('Error uploading post: ', error);
         }
+    }
+
+    const handleChangeInfo = (con) => {
+        setClickedContent(con);
+        setNewCon(true);
     }
 
     return (
@@ -114,10 +142,11 @@ const CreatePostPage = () => {
                     setNewCon={setNewCon} 
                     onDeleteContent={handleDeleteContent} 
                     onUploadPost={handleUploadPost}
+                    onhandleChangeInfo={handleChangeInfo}
                 />
             )}
             {!view && newCon && (
-                <NewPost setNewCon={setNewCon} onSaveContent={handleSaveContent}/>
+                <NewPost setNewCon={setNewCon} onSaveContent={handleSaveContent} clickedContent={clickedContent}/>
             )}
         </React.Fragment>
     )

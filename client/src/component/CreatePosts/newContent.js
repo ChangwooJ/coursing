@@ -3,7 +3,7 @@ import Search from "../MyList/search";
 
 const { kakao } = window;
 
-const NewPost = ({ setNewCon, onSaveContent }) => {
+const NewPost = ({ setNewCon, onSaveContent, clickedContent }) => {
     const mapContainerRef = useRef(null);
     const [upload, setUpload] = useState(true);
     const [image, setImage] = useState(null);
@@ -13,6 +13,20 @@ const NewPost = ({ setNewCon, onSaveContent }) => {
     const [mapWrite, setMapWrite] = useState(false);
     const [loc, setLoc] = useState([]);
     const [text, setText] = useState("");
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
+    const [category, setCategory] = useState(0);
+    const [place, setPlace] = useState("");
+
+    useEffect(() => {
+        if (clickedContent) {
+            setLoc({ address_name: clickedContent.address });
+            setStartTime(clickedContent.start_time);
+            setEndTime(clickedContent.end_time);
+            setCategory(clickedContent.cate_id);
+            setPlace(clickedContent.name);
+        }
+    }, [clickedContent]);
 
     useEffect(() => {
         if (mapContainerRef.current && searchPosition) {
@@ -49,7 +63,9 @@ const NewPost = ({ setNewCon, onSaveContent }) => {
     //다음 버튼
     const handleNext = () => {
         if (!mapWrite) {
-            setMapWrite(true);
+            if(clickedContent) {
+                setContentWrite(true);
+            } else setMapWrite(true);
         } else {
             setContentWrite(true);
             setMapWrite(false);
@@ -65,17 +81,15 @@ const NewPost = ({ setNewCon, onSaveContent }) => {
             setText("");
         }
         else if(!prev){
-            const temp_start = document.querySelector(".start_time").value;
-            const temp_end = document.querySelector(".end_time").value;
             const newData = {
                 _post_id: null,
                 content: text,
                 preview: preview,
                 address: loc.address_name,
                 cate_id: document.querySelector("select").selectedIndex,
-                start_time: temp_start,
-                end_time: temp_end,
-                name: document.querySelector(".place").value,
+                start_time: startTime,
+                end_time: endTime,
+                name: place,
                 img_src: preview,
             };
     
@@ -124,16 +138,16 @@ const NewPost = ({ setNewCon, onSaveContent }) => {
                 )}
                 {contentWrite && (
                     <div className="content">
-                        <input type="text" placeholder="장소명/메모" className="place" />
-                        <select>
-                            <option>카테고리</option>
-                            <option>음식</option>
-                            <option>관광/명소</option>
-                            <option>문화/예술</option>
-                            <option>쇼핑</option>
-                            <option>엑티비티</option>
-                            <option>휴양</option>
-                            <option>이벤트/축제</option>
+                        <input type="text" placeholder="장소명/메모" className="place" value={place} onChange={(e) => setPlace(e.target.value)}/>
+                        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <option value={0}>카테고리</option>
+                            <option value={1}>음식</option>
+                            <option value={2}>관광/명소</option>
+                            <option value={3}>문화/예술</option>
+                            <option value={4}>쇼핑</option>
+                            <option value={5}>엑티비티</option>
+                            <option value={6}>휴양</option>
+                            <option value={7}>이벤트/축제</option>
                         </select>
                         <textarea
                             value={text}
@@ -143,8 +157,8 @@ const NewPost = ({ setNewCon, onSaveContent }) => {
                             placeholder="여기에 컨텐츠를 입력하세요"
                         />
                         <p>시간: 
-                            <input type="text" placeholder="00" className="start_time" /> -
-                            <input type="text" placeholder="00" className="end_time" />
+                            <input type="text" placeholder="00" className="start_time" value={startTime} onChange={(e) => setStartTime(e.target.value)}/> -
+                            <input type="text" placeholder="00" className="end_time" value={endTime} onChange={(e) => setEndTime(e.target.value)}/>
                         </p>
                         <div className="content_bt">
                             <button className="content_prev bt" onClick={() => handleContentSave(true)}>이전</button>

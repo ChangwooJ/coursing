@@ -145,8 +145,6 @@ const AddPopUp = ({ content, onClose }) => {
             start_time: time.start,
             end_time: time.end
         }));
-        console.log(time);
-
     }, [time]);
 
     const change = (e) => {
@@ -285,7 +283,6 @@ const AddPopUp = ({ content, onClose }) => {
                             <button onClick={() => handleAddPlan()}>일정 추가하기</button>
                         </div>
                     </div>
-                    {console.log(content)}
                 </div>
             </div>
             <button onClick={onClose}>X</button>
