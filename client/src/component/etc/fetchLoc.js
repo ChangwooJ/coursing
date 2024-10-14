@@ -25,7 +25,7 @@ const fetchLocations = async (lists) => {
                         latlng: new kakao.maps.LatLng(document.y, document.x),
                         name: document.road_address ? document.road_address.building_name : '',
                         title: list.user_content_title,
-                        memo: list.memo,
+                        name: list.name,
                         list_id: list.list_id,
                         category: list.cate_img_src,
                         start_time: list.start_time,

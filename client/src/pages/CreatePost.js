@@ -7,6 +7,7 @@ import PreviewPost from "../component/CreatePosts/previewPost";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserContents } from "../redux/actions/userContentActions";
+import { useNavigate } from "react-router-dom";
 
 const CreatePostPage = () => {
     const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const CreatePostPage = () => {
     const [firstCon, setFirstCon] = useState(false);
     const [clickedContent, setClickedContent] = useState(null);
     const post_contents = useSelector(state => state.user_contents.user_contents);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetch = () => {
@@ -109,6 +111,7 @@ const CreatePostPage = () => {
             await Promise.all(uploadPromises);
 
             alert("업로드 하였습니다.");
+            navigate(-1);
         } catch (error) {
             console.error('Error uploading post: ', error);
         }

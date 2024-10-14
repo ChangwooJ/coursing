@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContents, fetchPosts } from "../../redux/actions/postActions";
 import fetchLocations from "../etc/fetchLoc";
@@ -8,6 +8,8 @@ import "../../css/post.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchPC } from "../../redux/actions/post_categoryActions";
 import AddPopUp from "./addPopUp";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const { kakao } = window;
 
@@ -26,11 +28,13 @@ const Post_Detail = () => {
     const [locations, setLocations] = useState([]);
     const [selectedCon, setSelectedCon] = useState(null);
     const [showPopUp, setShowPopUp] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
 
     const post = posts.find(p => p.post_id === id);
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
     const PC = post_category.filter(pc => pc.post_id === id);
     const { option, markers, overlays } = useFetchMaps({ content: content });
+    const { isAuthenticated, userInfo } = useContext(AuthContext);
 
     useEffect(() => {
         const fetch = async () => {
@@ -129,6 +133,39 @@ const Post_Detail = () => {
         setShowPopUp(false);
     }
 
+    const toggleOptions = () => {
+        setShowOptions(prev => !prev);
+    };
+
+    const popUpOption = () => {
+        return(
+            <div className="option_box">
+                {userInfo[0].user_id === content[0].writer_id && (
+                    <p onClick={() => deletePost()}>삭제</p>
+                )}
+            </div>
+        )
+    }
+
+    const deletePost = async () => {
+        const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirmDelete) {
+            return;
+        }
+        try {
+            const res = await axios.delete('http://localhost:8000/api/delete_post', { params: { post_id: id } })
+            if (res.status === 200) {
+                alert('삭제되었습니다.');
+                navigate(-1);
+            } else {
+                alert('삭제 실패: ' + res.data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    }
+
     if (loading || !post) {
         return <div>Loading...</div>;
     }
@@ -156,6 +193,10 @@ const Post_Detail = () => {
                     <div className="post_detail_title">
                         {post.title}
                     </div>
+                    <div className="post_detail_option" onClick={() => toggleOptions()}>
+                        •••
+                    </div>
+                    {showOptions && popUpOption()}
                     <div className="next_bar">
                         {content.map((con, index) => (
                             <>

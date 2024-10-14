@@ -78,4 +78,56 @@ const uploadImg = (req, res) => {
     res.json({ img_src: imagePath });
 }
 
-module.exports = {getPostList, getPostContent, postPost, uploadImg, uploadPostContent};
+const delete_post = (req, res) => {
+    const post_id = req.query.post_id;
+
+    if (!post_id) {
+        return res.status(400).json({ message: 'post_id is required' });
+    }
+
+    db.beginTransaction(err => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Transaction error' });
+        }
+
+        const query = `DELETE FROM coursing.post_category WHERE post_id = ?;`;
+        db.query(query, [post_id], (err, result) => {
+            if (err) {
+                return db.rollback(() => {
+                    console.error(err);
+                    res.status(500).json({ message: 'Error deleting post_category' });
+                })
+            }
+            const query2 = `DELETE FROM coursing.post WHERE post_id = ?;`;
+            db.query(query2, [post_id], (err, result) => {
+                if (err) {
+                    return db.rollback(() => {
+                        console.error(err);
+                        res.status(500).json({ message: 'Error deleting post' });
+                    })
+                }
+                const query3 = `DELETE FROM coursing.post_content WHERE _post_id = ?;`;
+                db.query(query3, [post_id], (err, result) => {
+                    if (err) {
+                        return db.rollback(() => {
+                            console.error(err);
+                            res.status(500).json({ message: 'Error deleting post_content' });
+                        })
+                    }
+                    db.commit(err => {
+                        if (err) {
+                            return db.rollback(() => {
+                                console.error(err);
+                                res.status(500).json({ message: 'Error committing transaction' });
+                            });
+                        }
+                        res.status(200).json({ message: 'Post deleted successfully' });
+                    });
+                })
+            })
+        })
+    })
+}
+
+module.exports = {getPostList, getPostContent, postPost, uploadImg, uploadPostContent, delete_post};

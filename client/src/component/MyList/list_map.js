@@ -14,6 +14,7 @@ const ListMap = () => {
     const [searchPosition, setSearchPosition] = useState(null);
     const [loc, setLoc] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [polyline, setPolyline] = useState(null);
     const { positions } = useContext(PositionsContext);
     const { location } = useContext(LocationContext);
     const { option, markers } = useFetchMaps({ content: positions });
@@ -71,15 +72,33 @@ const ListMap = () => {
     // 마커의 위치를 저장
     const position = locations.map(loc => loc.latlng);
 
-    // 선 그리기
-    const polyline = createPolyline(mapRef.current, position);
+    // 폴리라인 업데이트 함수
+    const updatePolyline = () => {
+        // 기존의 폴리라인이 존재하면 지도에서 제거
+        if (polyline) {
+            polyline.setMap(null);
+        }
+
+        // 새로운 폴리라인 생성 및 상태 업데이트
+        const position = locations.map(loc => loc.latlng);
+        const newPolyline = createPolyline(mapRef.current, position);
+        setPolyline(newPolyline);
+    };
+
+    useEffect(() => {
+        // 위치가 변경될 때마다 폴리라인 업데이트
+        if (mapRef.current && locations.length > 0) {
+            updatePolyline();
+        }
+    }, [locations]);
+
 
     const movePlanPosition = () => {
         map.panTo(location);
     }
 
     const moveSearchPosition = () => {
-        map.panTo(searchPosition);
+        map.setCenter(searchPosition);
 
         // 마커 생성
         var marker = new kakao.maps.Marker({

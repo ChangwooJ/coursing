@@ -89,7 +89,6 @@ const User_Page = () => {
                             </button>
                             {user_post.map(Upost => (
                                 <div key={Upost.post_id} className="up_wrap" onClick={() => handlePost(Upost.post_id)}>
-                                    <p className="up_title">{Upost.title}</p>
                                     <div className="up_content">
                                         {contents
                                             .filter(content => content._post_id === Upost.post_id)
@@ -98,6 +97,7 @@ const User_Page = () => {
                                                 <img src={con.img_src} />
                                             ))}
                                     </div>
+                                    <p className="up_title">{Upost.title}</p>
                                     <div className="up_category_wrap">
                                         {post_category
                                             .filter(pc => pc.post_id === Upost.post_id)

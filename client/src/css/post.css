@@ -46,6 +46,16 @@
     margin-bottom: 20px;
 }
 
+.post_detail_option {
+    cursor: pointer;
+}
+
+.option_box {
+    p {
+        cursor: pointer;
+    }
+}
+
 .next_bar {
     background-color: rgba(238, 238, 238, 0.7);
     width: 100%;

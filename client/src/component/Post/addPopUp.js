@@ -27,10 +27,10 @@ const AddPopUp = ({ content, onClose }) => {
     const [initTitle, setInitTitle] = useState("일정을 선택해주세요");
     const [view, setView] = useState(false);    //드롭다운 상태관리
 
-    const [schedule, setSchdule] = useState(Array(24).fill({ filled: false, memo: null, count: null, color: "transparent" })); //24시간 스케쥴
+    const [schedule, setSchdule] = useState(Array(24).fill({ filled: false, name: null, count: null, color: "transparent" })); //24시간 스케쥴
     const [addPlanData, setAddPlanData] = useState({
         address: null,
-        memo: null,
+        name: "",
         content_id: null,
         category: null,
         start_time: null,
@@ -55,15 +55,15 @@ const AddPopUp = ({ content, onClose }) => {
     //전달받은 일정에 맞춰 시간대별 일정 등록
     useEffect(() => {
         if (positions) {
-            const newSchdule = Array(24).fill({ filled: false, memo: null, count: null, color: "transparent" });
+            const newSchdule = Array(24).fill({ filled: false, name: null, count: null, color: "transparent" });
 
             positions.forEach(pos => {
-                const { start_time, end_time, memo } = pos;
+                const { start_time, end_time, name } = pos;
                 const getColor = getRandomColor();
                 for (let i = start_time; i < end_time; i++) {
                     if (i === Math.floor((end_time + start_time) / 2)) {
-                        newSchdule[i] = { filled: true, memo: memo, count: (end_time - start_time), color: getColor }
-                    } else newSchdule[i] = { filled: true, memo: "", count: null, color: getColor };
+                        newSchdule[i] = { filled: true, name: name, count: (end_time - start_time), color: getColor }
+                    } else newSchdule[i] = { filled: true, name: "", count: null, color: getColor };
                 }
             });
 
@@ -76,6 +76,7 @@ const AddPopUp = ({ content, onClose }) => {
         setContentId(user_content_id);
     }
 
+    //일정 선택
     const drop = () => {
         return titleList.map(tL => (
             <li
@@ -151,26 +152,30 @@ const AddPopUp = ({ content, onClose }) => {
         setAddPlanData({ ...addPlanData, [e.target.name]: e.target.value });
     }
 
-    const handleAddPlan = () => {
-        setAddPlanData(prevData => ({
-            ...prevData,
+    //일정 추가
+    const handleAddPlan = async () => {
+        const updatedData = {
+            ...addPlanData,
             address: content.address,
             category: content.cate_id,
             content_id: contentId
-        }));
-        axios.post('http://localhost:8000/api/add_plan', addPlanData, {
-            withCredentials: true
-        })
-            .then((response) => {
-                if (response.status === 200) {
-                    alert('추가되었습니다.');
-                    onClose();
-                }
-            })
-            .catch((error) => {
-                alert('에러가 발생했습니다.');
-                console.error(error);
+        };
+
+        try {
+            const res = await axios.post('http://localhost:8000/api/add_plan', updatedData, {
+                withCredentials: true
             });
+
+            if (res.status === 200) {
+                alert('추가되었습니다.');
+                onClose();
+                window.location.reload();
+            }
+
+        } catch (error) {
+            alert('에러가 발생했습니다.');
+            console.error(error);
+        }
     }
 
     //시간대 선택 색상
@@ -179,18 +184,18 @@ const AddPopUp = ({ content, onClose }) => {
         const color = "skyblue";
 
         if (start === null) {
-            newSchedule[end] = { filled: true, memo: null, count: null, color: color };
+            newSchedule[end] = { filled: true, name: null, count: null, color: color };
         } else if (end !== null) {
             for (let i = start; i <= end; i++) {
-                newSchedule[i] = { filled: true, memo: null, count: null, color: color };
+                newSchedule[i] = { filled: true, name: null, count: null, color: color };
             }
         }
 
         if (init !== null) {
             for (let i = start; i <= end; i++) {
-                newSchedule[i] = { filled: false, memo: null, count: null, color: "transparent" };
+                newSchedule[i] = { filled: false, name: null, count: null, color: "transparent" };
             }
-            newSchedule[init] = { filled: true, memo: null, count: 1, color: color };
+            newSchedule[init] = { filled: true, name: null, count: 1, color: color };
         }
 
         setSchdule(newSchedule);
@@ -208,7 +213,6 @@ const AddPopUp = ({ content, onClose }) => {
         )
     }
 
-    //console.log(content.address);
     return (
         <>
             <div className="addPlan_PopUp">
@@ -234,15 +238,15 @@ const AddPopUp = ({ content, onClose }) => {
                     ))}
                     {schedule.map((sch, index) => (
                         <>
-                            {sch.memo === null && (
+                            {sch.name === null && (
                                 <div className="null_box"></div>
                             )}
-                            {sch.memo && sch.memo !== "" && (<div
+                            {sch.name && sch.name !== "" && (<div
                                 key={index}
                                 className="memo_box"
                                 style={{ width: `${4.16 * sch.count}%` }}
                             >
-                                {sch.memo}
+                                {sch.name}
                             </div>
                             )}
                         </>
@@ -256,9 +260,9 @@ const AddPopUp = ({ content, onClose }) => {
                         <p>메모:
                             <input
                                 className="memo"
-                                type="text" name="memo"
+                                type="text" name="name"
                                 placeholder="원하는 메모를 입력하세요."
-                                value={addPlanData.memo}
+                                value={addPlanData.name}
                                 onChange={change}
                             />
                         </p>

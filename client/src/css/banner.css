@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     z-index: 4;
-    background-color: rgb(242, 242, 242);
+    background-color: rgb(253, 253, 253);
     position: fixed;
     padding: 10px;
     float: left;
@@ -12,7 +12,8 @@
     top: 20vh;
     height: 65vh;
     border-radius: 5px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 8px rgba(200, 225, 245, 1);
+    overflow-y: auto;
 }
 
 .title_li {   

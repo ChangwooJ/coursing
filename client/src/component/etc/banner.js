@@ -4,18 +4,31 @@ import { LocationContext } from "../../context/LocationContext";
 
 import "../../css/banner.css";
 import TitleSelect from "./titleSelect";
+import axios from "axios";
 
 const PlanBanner = ({ positions, setContentId }) => {
     const { setLocation } = useContext(LocationContext);
     const [selected, setSelected] = useState(null);    //일정의 목록 선택 상태 여부
 
     const handleDeletePlan = async (list_id) => {
+        const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirmDelete) {
+            return;
+        }
         try {
-            await DeletePlan(list_id);
+            const res = await axios.delete('http://localhost:8000/api/delete_plan', { params: { list_id: list_id } })
+            if (res.status === 200) {
+                alert('삭제되었습니다.');
+                window.location.reload();
+            } else {
+                alert('삭제 실패: ' + res.data.message);
+            }
         } catch (error) {
-            alert('Failed to delete plan.');
+            console.error(error);
+            alert("삭제 중 오류가 발생했습니다.");
         }
     }
+
     const changeLoc = (latlng, list_id) => {
         setLocation(latlng);
         setSelected(list_id);
@@ -39,7 +52,7 @@ const PlanBanner = ({ positions, setContentId }) => {
                             <img src={pos.category} className="cate_img" />
                             <p className="loc_name">{pos.name}</p>
                         </div>
-                        <button className="delete_bt" onClick={() => handleDeletePlan(positions.list_id)}>X</button>
+                        <button className="delete_bt" onClick={() => handleDeletePlan(pos.list_id)}>X</button>
                     </div>
                 ))
             )}

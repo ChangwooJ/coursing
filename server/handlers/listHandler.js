@@ -20,19 +20,19 @@ const getList = (req, res) => {
 };
 
 const postList = (req, res) => {
-    const { address, memo, content_id, category, start_time, end_time } = req.body;
+    const { address, name, content_id, category, start_time, end_time } = req.body;
     const query = `
     INSERT 
     INTO coursing.user_content_list 
-    (address, memo, content_id, category, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)
+    (address, name, content_id, category, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)
     ;`;
-    const params = [address, memo, content_id, category, start_time, end_time];
+    const params = [address, name, content_id, category, start_time, end_time];
     db.query(query, params, (err, result)=>{
         if(err) {
             res.status(500).send(err);
             console.log(err);
         } else {
-            res.send(result);
+            res.status(200).json({ message: 'user_content added successfully' });
         }
     })
 }
@@ -55,21 +55,18 @@ const getUserContentList = (req, res) => {
 }
 
 const deleteList = (req, res) => {
-    const { list_id } = req.body;
-
+    const list_id = req.query.list_id;
     const query = `
     DELETE 
     FROM coursing.user_content_list
     WHERE list_id = ?
     ;`;
-
-    const params = [list_id];
-    db.query(query, params, (err, result) => {
+    db.query(query, [list_id], (err, result) => {
         if (err) {
             res.status(500).send(err);
             console.log(err);
         } else {
-            res.send(result);
+            res.status(200).json({ message: 'user_content_list deleted successfully' });
         }
     });
 }
