@@ -11,13 +11,15 @@ const ListMap = () => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const [map, setMap] = useState(null);
-    const [searchPosition, setSearchPosition] = useState(null);
-    const [loc, setLoc] = useState([]);
     const [locations, setLocations] = useState([]);
     const [polyline, setPolyline] = useState(null);
     const { positions } = useContext(PositionsContext);
     const { location } = useContext(LocationContext);
+    const [results, setResults] = useState([]);
+    const [clickPosition, setClickPosition] = useState(null);
     const { option, markers } = useFetchMaps({ content: positions });
+    const [searchMarkers, setSearchMarkers] = useState([]);
+    const [infoWindows, setInfoWindows] = useState([]);
 
     useEffect(() => {
         if (location !== null && map) {
@@ -26,10 +28,17 @@ const ListMap = () => {
     }, [location]);
 
     useEffect(() => {
-        if (searchPosition !== null && map) {
-            moveSearchPosition();
+        if (results && map) {
+            mapSearchPosition();
+            map.setCenter(new kakao.maps.LatLng(results[0].y, results[0].x));
         }
-    }, [searchPosition]);
+    }, [results]);
+
+    useEffect(() => {
+        if (clickPosition !== null && map) {
+            moveClickPosition();
+        }
+    }, [clickPosition]);
 
     useEffect(() => {
         if (mapContainerRef.current && option.center && markers.length > 0) {
@@ -97,34 +106,59 @@ const ListMap = () => {
         map.panTo(location);
     }
 
-    const moveSearchPosition = () => {
-        map.setCenter(searchPosition);
+    const mapSearchPosition = () => {
+        deleteMarkers();    //기존 마커 삭제
 
-        // 마커 생성
-        var marker = new kakao.maps.Marker({
-            position: searchPosition,
-            clickable: true
+        //새로운 검색값에 따른 마커 생성
+        const newMarkers = results.map(res => {
+            const marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(res.y, res.x),
+                clickable: true
+            });
+
+            marker.setMap(map);
+            return marker;
         });
 
-        marker.setMap(map);
+        //새로운 겁색값에 따른 인포윈도우 생성
+        const newInfoWindows = results.map((res, index) => {
+            const iwContent = `<div>${res.place_name}</div>`;
+            const iwRemoveable = true;
 
-        var iwContent = `<div>${loc.place_name}</div>`,
-            iwRemoveable = true;
+            const infowindow = new kakao.maps.InfoWindow({
+                content: iwContent,
+                removable: iwRemoveable,
+            });
 
-        // 인포윈도우 생성
-        var infowindow = new kakao.maps.InfoWindow({
-            content: iwContent,
-            removable: iwRemoveable
+            infowindow.open(map, newMarkers[index]);
+            return infowindow;
         });
 
-        infowindow.open(map, marker);
+        //상태관리
+        setSearchMarkers(newMarkers);
+        setInfoWindows(newInfoWindows);
+    }
 
+    //새로운 검색 값이 반환될때마다 기존 마커,인포 값 제거
+    const deleteMarkers = () => {
+        searchMarkers.forEach(marker => {
+            marker.setMap(null);
+        });
+        infoWindows.forEach((infowindow) => {
+            infowindow.close();
+        });
+        setSearchMarkers([]);
+        setInfoWindows([]);
+    }
+
+    const moveClickPosition = () => {
+        map.panTo(clickPosition);
     }
 
     return (
         <div className="list_map_wrap">
             <div className="map" ref={mapContainerRef}></div>
-            <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
+            <Search setResults={setResults} setClickPosition={setClickPosition} />
         </div>
     );
 };
