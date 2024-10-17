@@ -10,6 +10,7 @@ const {getPCList, postPC} = require('../handlers/post_categoryHandler');
 const {getUser, postUser} = require('../handlers/userHandler');
 const {postEmail, postCode} = require('../handlers/emailCertHandler');
 const getCategory = require('../handlers/categoryHandler');
+const { getPlace } = require('../handlers/placeHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -36,5 +37,7 @@ router.get('/status', getLogged);
 
 router.post('/signup_email', postEmail);
 router.post('/check_code', postCode);
+
+router.get('/place/:id', getPlace);
 
 module.exports = router;

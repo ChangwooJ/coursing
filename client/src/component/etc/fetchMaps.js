@@ -57,7 +57,7 @@ const useFetchMaps = ({ content, onImgClick }) => {
 
                 if (infoText) {
                     const textBox = document.createElement('div');
-                    textBox.className = 'text-box';
+                    textBox.className = 'text_box';
                     textBox.innerHTML = infoText;
 
                     textBox.addEventListener('click', () => {

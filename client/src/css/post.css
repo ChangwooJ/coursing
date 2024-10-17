@@ -164,6 +164,11 @@
     top: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(256, 256, 256, 0.9);
+    .popup_title {
+        position: relative;
+        display: flex;
+        width: 100%;
+    }
     h2 {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -171,10 +176,18 @@
         width: 100%;
         height: fit-content;
     }
-    .notLogged {
-        width: 100%;
-        height: 100%;
-        border: 1px solid red;
+    .close_popup {
+        position: absolute;
+        right: 3%;
+        top: 25%;
+        width: 3%;
+        aspect-ratio: 1 / 1;
+        background-color: rgb(100, 149, 237);
+        color: white;
+        font-size: 18px;
+        border-radius: 5px;
+        border: 0.5px solid black;
+        cursor: pointer;
     }
 }
 
@@ -238,10 +251,11 @@
     justify-content: center;
     button {
         margin-top: 10%;
-        background-color: transparent;
+        background-color: rgb(100, 149, 237);
         width: 70%;
         height: 15%;
-        color: rgb(17, 67, 87);
+        color: white;
+        font-size: 15px;
         border: 2px solid skyblue;
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(110, 168, 192, 0.7);
@@ -251,7 +265,7 @@
 
 /*드롭다운*/
 .add_banner_title {
-    width: 70%;
+    width: 80%;
     line-height: 30px;
     text-align: center;
     font-size: 16px;

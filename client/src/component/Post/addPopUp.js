@@ -208,7 +208,7 @@ const AddPopUp = ({ content, onClose }) => {
     if (!isAuthenticated) {
         return (
             <div className="addPlan_PopUp">
-                <div className="notLoggged">로그인을 먼저 해주세요.</div>
+                <div className="notLoggged"><a href="/">로그인</a>을 먼저 해주세요.</div>
             </div>
         )
     }
@@ -216,7 +216,10 @@ const AddPopUp = ({ content, onClose }) => {
     return (
         <>
             <div className="addPlan_PopUp">
-                <h2>일정 추가</h2>
+                <div className="popup_title">
+                    <h2>일정 추가</h2>
+                    <button className="close_popup" onClick={onClose}>x</button>
+                </div>
                 <ul
                     className={`add_banner_title ${view ? "clicked" : ""}`}
                     onClick={() => setView(!view)}
@@ -289,7 +292,6 @@ const AddPopUp = ({ content, onClose }) => {
                     </div>
                 </div>
             </div>
-            <button onClick={onClose}>X</button>
         </>
     )
 }

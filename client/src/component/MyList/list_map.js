@@ -17,6 +17,7 @@ const ListMap = () => {
     const { location } = useContext(LocationContext);
     const [results, setResults] = useState([]);
     const [clickPosition, setClickPosition] = useState(null);
+    const [clickId, setClickId] = useState(null);
     const { option, markers } = useFetchMaps({ content: positions });
     const [searchMarkers, setSearchMarkers] = useState([]);
     const [infoWindows, setInfoWindows] = useState([]);
@@ -120,45 +121,71 @@ const ListMap = () => {
             return marker;
         });
 
-        //새로운 겁색값에 따른 인포윈도우 생성
-        const newInfoWindows = results.map((res, index) => {
-            const iwContent = `<div>${res.place_name}</div>`;
-            const iwRemoveable = true;
-
-            const infowindow = new kakao.maps.InfoWindow({
-                content: iwContent,
-                removable: iwRemoveable,
-            });
-
-            infowindow.open(map, newMarkers[index]);
-            return infowindow;
-        });
 
         //상태관리
         setSearchMarkers(newMarkers);
-        setInfoWindows(newInfoWindows);
     }
 
     //새로운 검색 값이 반환될때마다 기존 마커,인포 값 제거
-    const deleteMarkers = () => {
-        searchMarkers.forEach(marker => {
-            marker.setMap(null);
-        });
-        infoWindows.forEach((infowindow) => {
-            infowindow.close();
-        });
-        setSearchMarkers([]);
-        setInfoWindows([]);
+    const deleteMarkers = (click) => {
+        if(click) {
+            infoWindows.forEach((infowindow) => {
+                if (infowindow) {
+                    infowindow.close();
+                }
+            });
+            setInfoWindows([]);
+        }
+        else {
+            searchMarkers.forEach(marker => {
+                marker.setMap(null);
+            });
+            infoWindows.forEach((infowindow) => {
+                if (infowindow) {
+                    infowindow.close();
+                }
+            });
+            setSearchMarkers([]);
+            setInfoWindows([]);
+        }
     }
 
+    //목록에서 클릭 시
     const moveClickPosition = () => {
-        map.panTo(clickPosition);
+        map.setCenter(clickPosition);
+        deleteMarkers(true);
+        
+        //새로운 겁색값에 따른 인포윈도우 생성
+        const newInfoWindows = results.map((res, index) => {
+            if (
+                clickId && res.id === clickId
+            ) {
+                const iwContent = `
+                    <div style="
+                        padding: 5px 10px; 
+                        width: fit-content;
+                        font-size: 14px;;">
+                        ${res.place_name}
+                    </div>`;
+                const iwRemoveable = true;
+    
+                const infowindow = new kakao.maps.InfoWindow({
+                    content: iwContent,
+                    removable: iwRemoveable,
+                });
+    
+                infowindow.open(map, searchMarkers[index]);
+                return infowindow;
+            }
+        }).filter(infowindow => infowindow !== null);
+        
+        setInfoWindows(newInfoWindows);
     }
 
     return (
         <div className="list_map_wrap">
             <div className="map" ref={mapContainerRef}></div>
-            <Search setResults={setResults} setClickPosition={setClickPosition} />
+            <Search setResults={setResults} setClickPosition={setClickPosition} setClickId={setClickId} />
         </div>
     );
 };
