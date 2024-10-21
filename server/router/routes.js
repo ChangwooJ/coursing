@@ -11,6 +11,7 @@ const {getUser, postUser} = require('../handlers/userHandler');
 const {postEmail, postCode} = require('../handlers/emailCertHandler');
 const getCategory = require('../handlers/categoryHandler');
 const { getPlace } = require('../handlers/placeHandler');
+const { getReviews } = require('../handlers/reviewHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -39,5 +40,6 @@ router.post('/signup_email', postEmail);
 router.post('/check_code', postCode);
 
 router.get('/place/:id', getPlace);
+router.get('/reviews/:place_id', getReviews);
 
 module.exports = router;

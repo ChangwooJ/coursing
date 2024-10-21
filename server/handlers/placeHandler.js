@@ -7,6 +7,7 @@ const getPlace = (req, res) => {
     FROM place 
     LEFT JOIN place_img ON place.place_id = place_img._place_id 
     WHERE place.id = ?
+    ORDER BY place_img.place_img_id ASC
     ;`;
     db.query(query, [id], (err, results) => {
         if (err) {
@@ -19,6 +20,7 @@ const getPlace = (req, res) => {
         }
 
         const placeData = {
+            place_id: results[0].place_id,
             id: results[0].id,
             place_name: results[0].place_name,
             address: results[0].address,

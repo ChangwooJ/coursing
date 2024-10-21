@@ -34,7 +34,7 @@ const Post_Detail = () => {
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
     const PC = post_category.filter(pc => pc.post_id === id);
     const { option, markers, overlays } = useFetchMaps({ content: content });
-    const { isAuthenticated, userInfo } = useContext(AuthContext);
+    const { userInfo } = useContext(AuthContext);
 
     useEffect(() => {
         const fetch = async () => {

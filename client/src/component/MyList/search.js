@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Place from "./place";
+import Place from "../place/place";
 
 const { kakao } = window;
 
@@ -83,7 +83,6 @@ const Search = ({ setResults, setClickPosition, setClickId }) => {
                                         className="search_result_item"
                                         onClick={() => handleResultClick(place)}
                                     >
-                                        {console.log(place.id)}
                                         <p>{place.place_name}</p>
                                     </div>
                                 ))}

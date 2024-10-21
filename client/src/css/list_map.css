@@ -129,10 +129,158 @@
     cursor: pointer;
 }
 
+.place_wrap {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.place_wrap::-webkit-scrollbar {
+    display: none;
+}
+
 .place_img {
     width: 100%;
-    height: 5 / 3;
-    img {
-        width: 60%;
+    height: 40vh;
+    display: flex;
+}
+
+.main_img {
+    width: 60%;
+    height: 100%;
+}
+
+.side_img_wrap {
+    width: 40%;
+    height: 50%;
+    .side_img {
+        width: 100%;
+        height: 100%;
+        display: block;
     }
+}
+
+.place_title {
+    display: flex;
+    align-items: center;
+    width: 94%;
+    padding: 3%;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    .place_name {
+        margin-right: 2%;
+    }
+    .place_category {
+        font-size: 14px;
+        color: gray;
+    }
+}
+
+.place_info {
+    width: 94%;
+    padding: 3%;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    p {
+        height: 28px;
+        img { 
+            width: 5%;
+            aspect-ratio: 1 / 1;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    }
+}
+
+/*리뷰 컴포넌트*/
+.place_review {
+    width: 94%;
+    height: 100%;
+    padding: 3%;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    padding-bottom: 3%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    .review_count {
+        margin-left: 8px;
+        font-size: 13px;
+        color: gray;
+    }
+}
+
+.review_wrap {
+    width: 94%;
+    padding: 3%;
+}
+
+.review {
+    width: 100%;
+    height: 100%;
+    padding: 4% 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.review_top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3%;
+}
+
+.review_profile_img {
+    width: 10%;
+    border-radius: 50%;
+    margin-right: 3%;
+}
+
+.personal_rating {
+    margin-left: 15px;
+}
+
+.review_body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.navigation {
+    position: absolute;
+    top: 25%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+    button {
+        width: 30px;
+        font-size: 20px;
+        opacity: 0.8;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.3);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .scroll_bt {
+        width: 30px;
+        opacity: 0.7;
+    }
+}
+
+.review_img_wrap {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    overflow: hidden;
+    margin-bottom: 3%;
+}
+
+.review_img {
+    display: block;
+    width: 40%;
+    margin-right: 1%;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    transition: transform 0.2s ease;
 }
