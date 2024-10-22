@@ -41,7 +41,7 @@ const PostList = ({ post }) => {
         navigate(`/post/${post_id}`);
     }
 
-    const handleMapDetail = (address) => {
+    const handleMapDetail = () => {
         navigate('/my_plan');
         //일반 지도처럼 상세 정보, 리뷰 등을 보여줄 수 있는 기능 제작 후 수정.
     }

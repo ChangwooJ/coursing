@@ -1,11 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Review = ({place_id}) => {
+    const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sum, setSum] = useState(0);
     const [currentIndex, setCurrentIndex] = useState([]);
+    const [expand, setExpand] = useState([]);
+    const [reviewCount, setReviewCount] = useState(3);
 
     useEffect(() => {
         const fetchPlaceData = async () => {
@@ -76,6 +80,22 @@ const Review = ({place_id}) => {
         }
     };
 
+    const toggleExpand = (index) => {
+        setExpand((prev) =>
+            prev.includes(index)
+                ? prev.filter((i) => i !== index)
+                : [...prev, index]
+        );
+    };
+
+    const handleReviewCount = () => {
+        if(reviews.length - reviewCount < 3) {
+            setReviewCount(reviewCount + (reviews.length - reviewCount));
+        } else {
+            setReviewCount(reviewCount + 3);
+        }
+    }
+
     return (
         <div className="place_review">
             <div className="rating">
@@ -83,16 +103,15 @@ const Review = ({place_id}) => {
                 <p className="review_count">{reviews.length}개의 리뷰</p>
             </div>
             <div className="review_wrap">
-                {reviews.slice(0, 3).map((review, revIndex) => (
+                {reviews.slice(0, reviewCount).map((review, revIndex) => (
                     <div className="review">
                         <div className="review_top">
-                            <img src={review.profile_img} className="review_profile_img" />
-                            <p>{review.name}</p>
+                            <img src={review.profile_img} className="review_profile_img" onClick={() => navigate(`/profile/${review.user_id}`)} />
+                            <p className="review_user_name" onClick={() => navigate(`/profile/${review.user_id}`)} >{review.name}</p>
                             <p className="personal_rating">⭐ {review.rating}</p>
                         </div>
                         <div className="review_body">
                             {review.img.length !== 0 && (
-
                                 <div className="navigation">
                                     <button onClick={() => handlePrev(review, revIndex)} disabled={currentIndex[revIndex] === 0}>
                                         <img src="/img/scroll_left.png" className="scroll_bt" />
@@ -111,11 +130,19 @@ const Review = ({place_id}) => {
                                     />
                                 ))}
                             </div>
-                            <p className="review_commit">{review.comment}</p>
+                            <p className={`review_commit ${expand.includes(revIndex) ? 'expanded' : ''}`}>{review.comment}</p>
+                            {review.comment.length > 90 && (
+                                <button className="commit_toggle" onClick={() => toggleExpand(revIndex)}>
+                                    {expand.includes(revIndex) ? "접기" : "...더보기"}
+                                </button>
+                            )}
                         </div>
                     </div>
 
                 ))}
+                {reviewCount < reviews.length && (
+                    <button className="review_more" onClick={handleReviewCount}>{"리뷰 더보기 >"}</button>
+                )}
             </div>
         </div>
     )
