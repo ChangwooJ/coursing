@@ -3,17 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../../redux/actions/categoryActions";
 import Review from "./review";
-import AddPopUp from "../Post/addPopUp";
 
-const Place = ({ id, onClose }) => {
+const Place = ({ id, onClose, setContent, setShowPopUp }) => {
     const dispatch = useDispatch();
     const [placeData, setPlaceData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const categories = useSelector(state => state.categories.categories);
     const [category, setCategory] = useState(0);
-    const [showPopUp, setShowPopUp] = useState(false);
-    const [content, setContent] = useEffect([]);
 
     useEffect(() => {
         const fetch = async () => {
@@ -48,11 +45,24 @@ const Place = ({ id, onClose }) => {
     }, [placeData, categories]);
 
     useEffect(() => {
-        const newContent = []; // 이 부분이 복사 컨텐츠 만들고 태그값맞게 설정 후 적용된 컨텐츠를 addPopUp에 제공.
+        const setUpContent = () => {
+            const newContent = {
+                img_src: placeData.img[0],
+                name: placeData.place_name,
+                address: placeData.address,
+            }
+
+            setContent(newContent);
+        }
+        
+        if(placeData) {
+            setUpContent();
+        }
     }, [placeData]);
 
+
     if (loading) return <div>Loading...</div>;
-console.log(placeData);
+//console.log(placeData);
     return (
         <React.Fragment>
             <button onClick={onClose} className="close_place" >⇦</button>
@@ -74,13 +84,6 @@ console.log(placeData);
                             <button className="add_place_myplan" onClick={() => setShowPopUp(true)}>+</button>
                             <p>내 일정 추가</p>
                         </div>
-                        {showPopUp && (
-                            <div className="popup">
-                                <div className="popup-content">
-                                    <AddPopUp  />
-                                </div>
-                            </div>
-                        )}
                     </div>
                     <div className="place_info">
                         <p><img src="/img/주소.png" />{placeData.address}</p>

@@ -3,7 +3,7 @@ import Place from "../place/place";
 
 const { kakao } = window;
 
-const Search = ({ setResults, setClickPosition, setClickId }) => {
+const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowPopUp }) => {
     const [text, setText] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [pagination, setPagination] = useState(null);
@@ -103,7 +103,7 @@ const Search = ({ setResults, setClickPosition, setClickId }) => {
                             )}
                         </>
                     )}
-                    {id && (<Place id={id} onClose={closePlace} />)}
+                    {id && (<Place id={id} onClose={closePlace} setContent={setContent} setShowPopUp={setShowPopUp} />)}
                 </div>
             )}
         </React.Fragment>

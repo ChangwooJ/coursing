@@ -13,6 +13,7 @@ import PlanBanner from './component/etc/banner';
 import { LocationProvider } from './context/LocationContext';
 import SignUp from './pages/SignUp';
 import CreatePostPage from './pages/CreatePost';
+import Chat from './pages/Chat';
 
 const ProtectedRoute = ({ element }) => {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -68,6 +69,7 @@ function AppContent() {
         <Route path='/post/:post_id' element={<Post />} />
         <Route path='/sign_up' element={<SignUp />} />
         <Route path='/create_post' element={<CreatePostPage />} />
+        <Route path='/chat' element={<Chat />} />
       </Routes>
     </>
   )

@@ -4,6 +4,7 @@ import { PositionsContext } from '../../context/PositionsContext';
 import { LocationContext } from '../../context/LocationContext';
 import useFetchMaps from "../etc/fetchMaps";
 import fetchLocations from "../etc/fetchLoc";
+import AddPopUp from "../Post/addPopUp";
 
 const { kakao } = window;
 
@@ -21,6 +22,8 @@ const ListMap = () => {
     const { option, markers } = useFetchMaps({ content: positions });
     const [searchMarkers, setSearchMarkers] = useState([]);
     const [infoWindows, setInfoWindows] = useState([]);
+    const [content, setContent] = useState([]);
+    const [showPopUp, setShowPopUp] = useState(false);
 
     useEffect(() => {
         if (location !== null && map) {
@@ -128,7 +131,7 @@ const ListMap = () => {
 
     //새로운 검색 값이 반환될때마다 기존 마커,인포 값 제거
     const deleteMarkers = (click) => {
-        if(click) {
+        if (click) {
             infoWindows.forEach((infowindow) => {
                 if (infowindow) {
                     infowindow.close();
@@ -154,7 +157,7 @@ const ListMap = () => {
     const moveClickPosition = () => {
         map.setCenter(clickPosition);
         deleteMarkers(true);
-        
+
         //새로운 겁색값에 따른 인포윈도우 생성
         const newInfoWindows = results.map((res, index) => {
             if (
@@ -168,24 +171,36 @@ const ListMap = () => {
                         ${res.place_name}
                     </div>`;
                 const iwRemoveable = true;
-    
+
                 const infowindow = new kakao.maps.InfoWindow({
                     content: iwContent,
                     removable: iwRemoveable,
                 });
-    
+
                 infowindow.open(map, searchMarkers[index]);
                 return infowindow;
             }
         }).filter(infowindow => infowindow !== null);
-        
+
         setInfoWindows(newInfoWindows);
+    }
+
+    const closePopUp = () => {
+        setContent(null);
+        setShowPopUp(false);
     }
 
     return (
         <div className="list_map_wrap">
             <div className="map" ref={mapContainerRef}></div>
-            <Search setResults={setResults} setClickPosition={setClickPosition} setClickId={setClickId} />
+            {showPopUp && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <AddPopUp content={content} onClose={closePopUp} />
+                    </div>
+                </div>
+            )}
+            <Search setResults={setResults} setClickPosition={setClickPosition} setClickId={setClickId} setContent={setContent} setShowPopUp={setShowPopUp} />
         </div>
     );
 };
