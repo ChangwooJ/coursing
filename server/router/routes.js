@@ -12,6 +12,7 @@ const {postEmail, postCode} = require('../handlers/emailCertHandler');
 const getCategory = require('../handlers/categoryHandler');
 const { getPlace } = require('../handlers/placeHandler');
 const { getReviews } = require('../handlers/reviewHandler');
+const {postChatRoom, postChatMessage, getChatRoom, getChatRooms, getChatMessage} = require('../handlers/chatHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -41,5 +42,11 @@ router.post('/check_code', postCode);
 
 router.get('/place/:id', getPlace);
 router.get('/reviews/:place_id', getReviews);
+
+router.post('/newRoom', postChatRoom);
+router.post('/chat_room/message', postChatMessage);
+router.get('/chat_room', getChatRoom);
+router.get('/chat_rooms/:user_id', getChatRooms);
+router.get('/chat_room/get_message', getChatMessage);
 
 module.exports = router;

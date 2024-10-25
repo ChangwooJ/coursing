@@ -26,12 +26,19 @@ const corsOptions = {
 io.on('connection', (socket) => {
     console.log('새로운 클라이언트가 연결되었습니다:', socket.id);
 
-    // 클라이언트로부터 메시지 수신
-    socket.on('sendMessage', (message) => {
-        console.log('메시지 수신:', message);
+    // 유저가 특정 유저와 대화를 시작할 때 방에 참여시킴
+    socket.on('joinRoom', ({ userId, targetUserId }) => {
+        const roomId = [userId, targetUserId].sort().join('_');  // 두 유저의 ID를 이용해 고유한 방 이름 생성
+        socket.join(roomId);  // 해당 방에 유저를 입장시킴
+        console.log(`${userId}님이 ${roomId} 방에 입장했습니다.`);
+    });
 
-        // 다른 클라이언트들에게 메시지 브로드캐스트
-        io.emit('receiveMessage', message);
+    // 특정 방에서 메시지 수신
+    socket.on('sendMessage', ({ roomId, message }) => {
+        console.log('메시지 수신:', message, '방:', roomId);
+
+        // 같은 방에 있는 유저들에게만 메시지 전송
+        io.to(roomId).emit('receiveMessage', message);
     });
 
     // 클라이언트 연결 해제 처리

@@ -32,7 +32,7 @@ const User_Page = () => {
 
     useEffect(() => {
         dispatch(fetchUC(Number(user_id)));
-        if(!loading && (userInfo[0].user_id === Number(user_id))){
+        if (!loading && (userInfo[0].user_id === Number(user_id))) {
             setMyInfo(true);
         }
     }, [user_id, loading]);
@@ -53,7 +53,7 @@ const User_Page = () => {
         navigate('/create_post');
     }
 
-    if(loading){
+    if (loading) {
         return <div>Loading...</div>;
     }
 
@@ -61,7 +61,7 @@ const User_Page = () => {
     /*if(!loading && userInfo){
         navigate('/');
     }*/
-    
+    console.log(user_info);
     return (
         <React.Fragment>
             <div className="page_wrap">
@@ -77,6 +77,9 @@ const User_Page = () => {
                                         <p>#{uc.category_name}</p>
                                     ))}</div>
                                     <div className="info_intro">{user_info.intro}</div>
+                                    {!myInfo && (
+                                        <button className="message" onClick={() => navigate(`/chat/${user_id}`)}>메시지</button>
+                                    )}
                                 </div>
                                 {myInfo && (
                                     <button className="setting_bt"><img src="/img/설정.png" /></button>
@@ -84,9 +87,11 @@ const User_Page = () => {
                             </div>
                         </div>
                         <div className="user_post">
-                            <button className="new_post_bt">
-                                <img src="/img/글쓰기.png" onClick={() => handleNewPost()}/>
-                            </button>
+                            {myInfo && (
+                                <button className="new_post_bt">
+                                    <img src="/img/글쓰기.png" onClick={() => handleNewPost()} />
+                                </button>
+                            )}
                             {user_post.map(Upost => (
                                 <div key={Upost.post_id} className="up_wrap" onClick={() => handlePost(Upost.post_id)}>
                                     <div className="up_content">
@@ -102,8 +107,8 @@ const User_Page = () => {
                                         {post_category
                                             .filter(pc => pc.post_id === Upost.post_id)
                                             .map(fpc => (
-                                            <p className="up_category">#{fpc.category_name}</p>
-                                        ))}
+                                                <p className="up_category">#{fpc.category_name}</p>
+                                            ))}
                                     </div>
                                 </div>
                             ))}

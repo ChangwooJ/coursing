@@ -14,6 +14,7 @@ import { LocationProvider } from './context/LocationContext';
 import SignUp from './pages/SignUp';
 import CreatePostPage from './pages/CreatePost';
 import Chat from './pages/Chat';
+import ChatRoom from './pages/ChatRoom';
 
 const ProtectedRoute = ({ element }) => {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -70,6 +71,7 @@ function AppContent() {
         <Route path='/sign_up' element={<SignUp />} />
         <Route path='/create_post' element={<CreatePostPage />} />
         <Route path='/chat' element={<Chat />} />
+        <Route path='/chat/:user_id' element={<ChatRoom />} />
       </Routes>
     </>
   )
