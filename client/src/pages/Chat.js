@@ -26,7 +26,7 @@ const Chat = () => {
   if(loading) {
     return <div>Loading...</div>;
   }
-console.log(rooms);
+
   return (
     <div className="chat_wrap">
       <div className='chat_top'>메시지</div>

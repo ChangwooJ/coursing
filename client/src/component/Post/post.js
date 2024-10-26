@@ -182,7 +182,7 @@ const Post_Detail = () => {
         }
     }
 
-    const sharePost = (id) => {
+    const sharePost = () => {
         const shareLink = encodeURIComponent(`http://localhost:3000/post/${id}`);
         return (
             <div className="followList_wrap">

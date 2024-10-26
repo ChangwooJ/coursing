@@ -36,7 +36,7 @@
     height: 80%;
     box-sizing: border-box;
     padding: 2%;
-    overflow-y: auto;
+    overflow-y: scroll;
     .message_log {
         display: flex;
         align-items: center;
@@ -60,6 +60,11 @@
         color: gray;
         font-size: 12px;
     }
+}
+
+
+.chat_room_middle::-webkit-scrollbar {
+    display: none;
 }
 
 .chat_room_middle .message_log_me {

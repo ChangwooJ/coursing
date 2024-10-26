@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 
 import "../css/ChatRoom.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../redux/actions/userActions";
+import UrlPreView from "../component/Chat/urlPreivew";
 
 const ChatRoom = () => {
     const navigate = useNavigate();
@@ -18,6 +19,18 @@ const ChatRoom = () => {
     const dispatch = useDispatch();
     const users = useSelector(state => state.users.users);
     const target_info = users.find(user => user.user_id === Number(user_id));
+    const location = useLocation();
+
+    const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const shareLink = params.get("shareLink");
+        if (shareLink) {
+            setMessage(decodeURIComponent(shareLink));
+        }
+    }, [location]);
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -35,7 +48,6 @@ const ChatRoom = () => {
                 const response = await axios.get('http://localhost:8000/api/chat_room', {
                     params: { room_name }
                 });
-                console.log(response.data);
 
                 if (response.data.exists) {
                     setRoomExist(true);
@@ -106,7 +118,30 @@ const ChatRoom = () => {
             handleSendMessage();
         }
     };
-    console.log(target_info);
+
+    const messageUrl = (chat) => {
+        const message_text = chat.message; 
+        const message = (message_text) => {
+            return message_text.split(urlPattern).map((mes, index) => {
+                if (urlPattern.test(mes)) {
+                    const href = mes.startsWith("http") ? mes : `http://${mes}`;
+                    return (
+                        <a key={index} href={href} target="_blank" rel="noopener noreferrer">
+                            {mes}
+                        </a>
+                    );
+                }
+                return mes;
+            })
+        }
+        return (
+            <>
+                <span className="message_text">{message(message_text)}</span>
+                <UrlPreView />
+            </>
+        )
+    }
+    
     return (
         <React.Fragment>
             <div className="chat_room_wrap">
@@ -120,7 +155,7 @@ const ChatRoom = () => {
                             {chat.send_user_id !== userInfo[0].user_id && (
                                 <img src={target_info.profile_img} className="target_img" />
                             )}
-                            <span className="message_text">{chat.message}</span>
+                            {messageUrl(chat)}
                             <span className="send_time">{chat.time}</span>
                         </div>
                     ))}
