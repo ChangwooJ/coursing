@@ -45,7 +45,6 @@ const RoomList = ({ room, user_id }) => {
 
     const lastChatLog = chatLogs.length > 0 ? chatLogs[chatLogs.length - 1] : null;
 
-console.log("chat: ",target_id);
     return (
         <>
             {target_info && (

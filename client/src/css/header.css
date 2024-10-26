@@ -17,9 +17,15 @@
         margin-bottom: 10px;
     }
     button {
-        position: relative;
-        left: 50px;
-    }
+        color: white;
+        background-color:rgba(100, 149, 237, 0.9);
+        border-radius: 5px;
+        padding: 2% 4%;
+        font-weight: 550;
+        border: none;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(100, 149, 237, 0.9);
+    } 
 }
 
 .my_banner_wrap .my_banner img{

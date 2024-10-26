@@ -10,6 +10,7 @@ const NewPost = ({ setNewCon, onSaveContent, clickedContent }) => {
     const [preview, setPreview] = useState(null);
     const [contentWrite, setContentWrite] = useState(false);
     const [searchPosition, setSearchPosition] = useState(null);
+    const [clickId, setClickId] = useState(0);
     const [mapWrite, setMapWrite] = useState(false);
     const [loc, setLoc] = useState([]);
     const [text, setText] = useState("");
@@ -127,7 +128,7 @@ const NewPost = ({ setNewCon, onSaveContent, clickedContent }) => {
                 )}
                 {mapWrite && (
                     <div className="map_write">
-                        <Search setLoc={setLoc} setSearchPosition={setSearchPosition} />
+                        <Search setResults={setLoc} setClickPosition={setSearchPosition} setClickId={setClickId} create={true} />
                         {searchPosition && (
                             <>
                                 <div className="map" ref={mapContainerRef} style={{ width: "450px", height: "400px" }}></div>

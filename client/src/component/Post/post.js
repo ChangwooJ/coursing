@@ -29,6 +29,8 @@ const Post_Detail = () => {
     const [selectedCon, setSelectedCon] = useState(null);
     const [showPopUp, setShowPopUp] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
+    const [follower, setFollower] = useState([]);
+    const [showFollowList, setShowFollowList] = useState(false);
 
     const post = posts.find(p => p.post_id === id);
     const content = useMemo(() => contents.filter(c => c.post_id === id), [contents, id]);
@@ -46,6 +48,19 @@ const Post_Detail = () => {
 
         fetch();
     }, [dispatch]);
+
+    useEffect(() => {
+        const followList = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/followList/${userInfo[0].user_id}`);
+                setFollower(response.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        followList();
+    }, [userInfo]);
 
     useEffect(() => {
         if (mapContainerRef.current && option.center && markers.length > 0) {
@@ -143,6 +158,7 @@ const Post_Detail = () => {
                 {userInfo[0].user_id === content[0].writer_id && (
                     <p onClick={() => deletePost()}>삭제</p>
                 )}
+                <p onClick={() => {sharePost(); setShowFollowList(true);}}>공유</p>
             </div>
         )
     }
@@ -166,10 +182,26 @@ const Post_Detail = () => {
         }
     }
 
+    const sharePost = (id) => {
+        const shareLink = encodeURIComponent(`http://localhost:3000/post/${id}`);
+        return (
+            <div className="followList_wrap">
+                <div className="followList">
+                    {follower.map((fol) => ((
+                        <div className="following" 
+                            onClick={() => navigate(`/chat/${fol.user_id}?shareLink=${shareLink}`)}>
+                            <img src={fol.profile_img} />
+                            <p>{fol.name}</p>
+                        </div>
+                    )))}
+                </div>
+            </div>
+        )
+    }
+
     if (loading || !post) {
         return <div>Loading...</div>;
     }
-
 
     return (
         <React.Fragment>
@@ -228,6 +260,7 @@ const Post_Detail = () => {
                         <div className="main_map" ref={mapContainerRef} ></div>
                     </div>
                 </div>
+                {showFollowList && sharePost()}
             </div>
         </React.Fragment>
     )

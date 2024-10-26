@@ -13,6 +13,7 @@ const getCategory = require('../handlers/categoryHandler');
 const { getPlace } = require('../handlers/placeHandler');
 const { getReviews } = require('../handlers/reviewHandler');
 const {postChatRoom, postChatMessage, getChatRoom, getChatRooms, getChatMessage} = require('../handlers/chatHandler');
+const { getFollow } = require('../handlers/followHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -48,5 +49,7 @@ router.post('/chat_room/message', postChatMessage);
 router.get('/chat_room', getChatRoom);
 router.get('/chat_rooms/:user_id', getChatRooms);
 router.get('/chat_room/get_message', getChatMessage);
+
+router.get('/followList/:user_id', getFollow);
 
 module.exports = router;

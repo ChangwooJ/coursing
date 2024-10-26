@@ -3,7 +3,7 @@ import Place from "../place/place";
 
 const { kakao } = window;
 
-const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowPopUp }) => {
+const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowPopUp, create }) => {
     const [text, setText] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [pagination, setPagination] = useState(null);
@@ -71,7 +71,7 @@ const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowP
                 ><img src="img/초기화.png" /></button>
                 <button type="submit"><img src="img/검색.png" /></button>
             </form>
-            {searched && (
+            {searched && searchResults && (
                 <div className="search_results">
                     {!id && (
                         <>
@@ -103,7 +103,7 @@ const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowP
                             )}
                         </>
                     )}
-                    {id && (<Place id={id} onClose={closePlace} setContent={setContent} setShowPopUp={setShowPopUp} />)}
+                    {id && !create && (<Place id={id} onClose={closePlace} setContent={setContent} setShowPopUp={setShowPopUp} />)}
                 </div>
             )}
         </React.Fragment>

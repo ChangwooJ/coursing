@@ -189,7 +189,7 @@ const ListMap = () => {
         setContent(null);
         setShowPopUp(false);
     }
-
+    console.log(clickId);
     return (
         <div className="list_map_wrap">
             <div className="map" ref={mapContainerRef}></div>
@@ -200,7 +200,13 @@ const ListMap = () => {
                     </div>
                 </div>
             )}
-            <Search setResults={setResults} setClickPosition={setClickPosition} setClickId={setClickId} setContent={setContent} setShowPopUp={setShowPopUp} />
+            <Search 
+                setResults={setResults} 
+                setClickPosition={setClickPosition} 
+                setClickId={setClickId} 
+                setContent={setContent} 
+                setShowPopUp={setShowPopUp} 
+            />
         </div>
     );
 };

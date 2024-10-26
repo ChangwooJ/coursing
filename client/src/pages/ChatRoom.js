@@ -51,7 +51,25 @@ const ChatRoom = () => {
         if (!loading && room_name) {
             findRoom();
         }
-    }, [loading, room_name, message]);
+    }, [loading, room_name]);
+
+    useEffect(() => {
+        const findRoom = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/chat_room/get_message', {
+                    params: { room_name }
+                });
+
+                setChatLog(response.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        if (room_name) {
+            findRoom();
+        }
+    }, [room_name, message]);
 
 
     const handleSendMessage = async () => {
