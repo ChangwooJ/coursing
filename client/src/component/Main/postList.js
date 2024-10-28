@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContents } from "../../redux/actions/postActions";
@@ -8,6 +8,8 @@ import PostMap from "./postMap";
 import '../../css/postList.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 
 const PostList = ({ post }) => {
     const navigate = useNavigate();
@@ -17,6 +19,8 @@ const PostList = ({ post }) => {
     const [loading, setLoading] = useState(true);
     const [selected, setSelected] = useState(0);
     const [swiperInstance, setSwiperInstance] = useState(null);
+    const { userInfo } = useContext(AuthContext);
+    const [commending, setCommending] = useState(false);
 
     useEffect(() => {
         const fetch = () => {
@@ -25,6 +29,12 @@ const PostList = ({ post }) => {
         };
         fetch();
     }, [dispatch]);
+
+    useEffect(() => {
+        if(post.commend !== null) {
+            setCommending(true);
+        }
+    }, [post]);
 
     const navigateSlide = (postId, index) => {
         if (swiperInstance) {
@@ -37,19 +47,40 @@ const PostList = ({ post }) => {
         navigate(`/profile/${user_id}`);
     }
 
-    const navigatePage2Detail = (post_id) => {
-        navigate(`/post/${post_id}`);
+    const navigatePage2Detail = async (post_id) => {
+        try {
+            await axios.post(`http://localhost:8000/api/viewedPost`, {
+                viewed_post_id: post_id,
+                user_id: userInfo[0].user_id
+            });
+    
+            navigate(`/post/${post_id}`);
+        } catch (err) {
+            console.error("Error saving viewed post:", err);
+        }
     }
 
     const handleMapDetail = () => {
         navigate('/my_plan');
-        //일반 지도처럼 상세 정보, 리뷰 등을 보여줄 수 있는 기능 제작 후 수정.
+    }
+
+    const handleCommend = async (commending) => {
+        if (!commending) {
+            try {
+                await axios.post(`http://localhost:8000/api/recommmended`, {
+                    viewed_post_id: post.post_id,
+                    user_id: userInfo[0].user_id
+                });
+            } catch (err) {
+                console.error("Error saving viewed post:", err);
+            }
+        }
     }
 
     if (loading) {
         return <div>Loading...</div>;
     }
-
+console.log(post);
     return (
         <React.Fragment>
             <div className="post_wrap">
@@ -113,6 +144,7 @@ const PostList = ({ post }) => {
                             </>
                         ))
                     }
+                    <p className="post_commended" onClick={() => handleCommend(commending)}><p className={`commend_shape ${commending ? "true": ""}`}>★</p>{post.commended}</p>
                 </div>
             </div>
         </React.Fragment>

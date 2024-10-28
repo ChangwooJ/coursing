@@ -8,6 +8,7 @@ import { fetchContents } from "../../redux/actions/postActions";
 import { fetchPC } from "../../redux/actions/post_categoryActions";
 import { AuthContext } from "../../context/AuthContext";
 import "../../css/user_page.css";
+import axios from "axios";
 
 const User_Page = () => {
     const { user_id } = useParams();
@@ -20,9 +21,11 @@ const User_Page = () => {
     const post_category = useSelector(state => state.PC.PC);
     const [fetch, setFetch] = useState(false);
     const [myInfo, setMyInfo] = useState(false);
+    const [follower, setFollower] = useState([]);
     const { loading, userInfo } = useContext(AuthContext);
     const user_post = posts.filter(post => post.writer_id === Number(user_id));
     const user_info = users.find(user => user.user_id === Number(user_id));
+    const [isFollowing, setIsFollowing] = useState(false);
 
     useEffect(() => {
         dispatch(fetchPosts());
@@ -45,6 +48,25 @@ const User_Page = () => {
         }
     }, [dispatch, fetch]);
 
+    useEffect(() => {
+        const fetchFollowed = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/followList/${userInfo[0].user_id}`);
+                setFollower(response.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        if(user_id) {
+            fetchFollowed();
+        }
+    }, [user_id]);
+
+    useEffect(() => {
+        if(follower.some(follow => follow.user_id === Number(user_id))) setIsFollowing(true);
+    }, [follower]);
+
     const handlePost = (post_id) => {
         navigate(`/post/${post_id}`);
     }
@@ -53,15 +75,24 @@ const User_Page = () => {
         navigate('/create_post');
     }
 
+    const handleFollow = async () => {
+        try {
+            const response = await axios.post(`http://localhost:8000/api/following`, {
+                follower : userInfo[0].user_id,
+                followee : user_id
+            });
+            if(response.status === 200) {
+                setIsFollowing(true);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    //마이페이지의 경우 로그인 페이지로의 자동 이동 기능이 필요함
-    /*if(!loading && userInfo){
-        navigate('/');
-    }*/
-    console.log(user_info);
     return (
         <React.Fragment>
             <div className="page_wrap">
@@ -78,7 +109,15 @@ const User_Page = () => {
                                     ))}</div>
                                     <div className="info_intro">{user_info.intro}</div>
                                     {!myInfo && (
-                                        <button className="message" onClick={() => navigate(`/chat/${user_id}`)}>메시지</button>
+                                        <>
+                                            {!isFollowing && (
+                                                <button className="follow" onClick={handleFollow}>팔로우</button>
+                                            )}
+                                            {isFollowing && (
+                                                <button className="follow">팔로우 취소</button>
+                                            )}
+                                            <button className="message" onClick={() => navigate(`/chat/${user_id}`)}>메시지</button>
+                                        </>
                                     )}
                                 </div>
                                 {myInfo && (

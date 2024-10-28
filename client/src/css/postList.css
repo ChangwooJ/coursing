@@ -117,6 +117,7 @@
 }
 
 .post_banner_wrap {
+    position: relative;
     width: 25%;
     box-sizing: border-box;
     border-radius: 5px;
@@ -175,4 +176,24 @@
 
 .post_banner_sep:last-child {
     visibility: hidden;
+}
+
+.post_commended {
+    display: flex;
+    padding-top: 10px;
+    position: absolute;
+    border-top: 1px solid black;
+    width: 90%;
+    height: 40px;
+    bottom: 1%;
+    cursor: pointer;
+    .commend_shape {
+        text-align: center;
+        height: 60%;
+        width: 30px;
+        margin-right: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    .true
 }

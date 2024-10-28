@@ -34,8 +34,9 @@ const getFollow = async (req, res) => {
             })
             followees.push(followeesData);
         }
-        
+
         res.status(200).json(followees);
+        console.log("follow:",followees);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: '서버 오류가 발생했습니다.'})
@@ -44,5 +45,21 @@ const getFollow = async (req, res) => {
 
 }
 
+const postFollowing = (req, res) => {
+    const { follower, followee } = req.body;
+    const query = `
+    INSERT INTO coursing.follow 
+    (follower, followee) VALUES (?, ?);
+    ;`;
+    
+    db.query(query, [follower, followee], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+}
 
-module.exports = { getFollow };
+module.exports = { getFollow, postFollowing };

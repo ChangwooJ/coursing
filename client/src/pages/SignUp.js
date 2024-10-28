@@ -14,6 +14,7 @@ const SignUp = () => {
         ph: '',
         email: '',
         address: '',
+        profile_img: '/img/기본프로필.png',
     });
 
     const [cert, setCert] = useState(false);
