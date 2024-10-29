@@ -5,10 +5,14 @@ import { LocationContext } from "../../context/LocationContext";
 import "../../css/banner.css";
 import TitleSelect from "./titleSelect";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const PlanBanner = ({ positions, setContentId }) => {
     const { setLocation } = useContext(LocationContext);
     const [selected, setSelected] = useState(null);    //일정의 목록 선택 상태 여부
+    const [newPlan, setNewPlan] = useState(false);
+    const [newTitle, setNewTitle] = useState("");
+    const { userInfo } = useContext(AuthContext);
 
     const handleDeletePlan = async (list_id) => {
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
@@ -34,9 +38,33 @@ const PlanBanner = ({ positions, setContentId }) => {
         setSelected(list_id);
     }
 
+    const handleNewTitle = async () => {
+        try {
+            await axios.post('http://localhost:8000/api/newTitle', {
+                _user_id: userInfo[0].user_id,
+                user_content_title: newTitle
+            })
+            setNewPlan(false);
+            setNewTitle("");
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     return (
         <div className="banner_wrap">
-            <TitleSelect setContentId={setContentId} />
+            {!newPlan && (
+                <TitleSelect setContentId={setContentId}/>
+            )}
+            {newPlan && (
+                <div className="newTitle_wrap">
+                    <input type="text" className="newTitle" 
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                    />
+                    <button className="newTitle_bt" onClick={handleNewTitle}>생성</button>
+                </div>
+            )}
             {positions.length > 0 && (
                 positions.map(pos => (
                     <div 
@@ -56,6 +84,10 @@ const PlanBanner = ({ positions, setContentId }) => {
                     </div>
                 ))
             )}
+            <div className="button_wrap">
+                <button className="new_plan" onClick={() => setNewPlan(true)}>새 일정 추가</button>
+                <button className="plan_delete">일정 삭제</button>
+            </div>
         </div>
     )
 }

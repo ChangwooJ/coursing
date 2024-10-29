@@ -194,6 +194,9 @@
         margin-right: 10px;
         border: 1px solid black;
         border-radius: 10px;
+        color: black;
     }
-    .true
+    .commend_shape.true {
+        color: yellow;
+    }
 }

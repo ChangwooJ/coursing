@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const CreatePostPage = () => {
     const dispatch = useDispatch();
-    const [ContentId, setContentId] = useState(1);
+    const [ContentId, setContentId] = useState(0);
     const [view, setView] = useState(true);
     const [newCon, setNewCon] = useState(true);
     const [state, setState] = useState(false);  //기존/새 일정 구분

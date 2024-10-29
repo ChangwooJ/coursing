@@ -86,14 +86,13 @@ const NewPost = ({ setNewCon, onSaveContent, clickedContent }) => {
                 _post_id: null,
                 content: text,
                 preview: preview,
-                address: loc.address_name,
+                address: loc[0].address_name,
                 cate_id: document.querySelector("select").selectedIndex,
                 start_time: startTime,
                 end_time: endTime,
                 name: place,
                 img_src: preview,
             };
-    
             onSaveContent(newData, image);
             setNewCon(false);
 

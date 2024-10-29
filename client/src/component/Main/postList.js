@@ -31,9 +31,26 @@ const PostList = ({ post }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        if(post.commend !== null) {
-            setCommending(true);
+        const fetchRecommend = async () => {
+            try {
+                const response = await axios.post(`http://localhost:8000/api/getRecommend`, {
+                    params: {
+                        viewed_post_id: post.post_id,
+                        user_id: userInfo[0].user_id
+                    }
+                });
+    
+                if (response.data.recommend === 1) {
+                    setCommending(true);
+                } else {
+                    setCommending(false);
+                }
+            } catch (err) {
+                console.error("Error saving viewed post:", err);
+            }
         }
+    
+        fetchRecommend();
     }, [post]);
 
     const navigateSlide = (postId, index) => {
@@ -71,6 +88,7 @@ const PostList = ({ post }) => {
                     viewed_post_id: post.post_id,
                     user_id: userInfo[0].user_id
                 });
+                setCommending(true);
             } catch (err) {
                 console.error("Error saving viewed post:", err);
             }
@@ -80,7 +98,7 @@ const PostList = ({ post }) => {
     if (loading) {
         return <div>Loading...</div>;
     }
-console.log(post);
+console.log(post.commended);
     return (
         <React.Fragment>
             <div className="post_wrap">

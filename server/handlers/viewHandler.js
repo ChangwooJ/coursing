@@ -6,7 +6,7 @@ const postViewed = (req, res) => {
     try {
         const query = `SELECT * FROM coursing.user_viewed WHERE _user_id = ? AND viewed_post_id = ?`;
         db.query(query, [user_id, viewed_post_id], (err, result) => {
-            if(err) {
+            if (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Error exist viewed" });
             }
@@ -21,7 +21,7 @@ const postViewed = (req, res) => {
                     console.error("Error saving viewed post:", err);
                     return res.status(500).json({ message: "Failed to save viewed post" });
                 }
-    
+
                 res.status(201).json({ message: "Viewed post saved" });
             });
         });
@@ -37,7 +37,7 @@ const postRecommended = (req, res) => {
     try {
         const query = `SELECT * FROM coursing.user_viewed WHERE _user_id = ? AND viewed_post_id = ?`;
         db.query(query, [user_id, viewed_post_id], (err, result) => {
-            if(err) {
+            if (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Error exist viewed" });
             }
@@ -49,20 +49,18 @@ const postRecommended = (req, res) => {
                         console.error("Error updating recommend value:", err);
                         return res.status(500).json({ message: "Failed to update recommend value" });
                     }
-
-                    return res.status(200).json({ message: "Recommend value updated" });
+                    updateRecommended(viewed_post_id, res);
+                });
+            } else {
+                const query2 = `INSERT INTO coursing.user_viewed (_user_id, viewed_post_id, recommend) VALUES (?, ?, ?);`;
+                db.query(query2, [user_id, viewed_post_id, 1], (err, result) => {
+                    if (err) {
+                        console.error("Error saving viewed post:", err);
+                        return res.status(500).json({ message: "Failed to save viewed post" });
+                    }
+                    updateRecommended(viewed_post_id, res);
                 });
             }
-
-            const query2 = `INSERT INTO coursing.user_viewed (_user_id, viewed_post_id, recommend) VALUES (?, ?, ?);`;
-            db.query(query2, [user_id, viewed_post_id, 1], (err, result) => {
-                if (err) {
-                    console.error("Error saving viewed post:", err);
-                    return res.status(500).json({ message: "Failed to save viewed post" });
-                }
-    
-                res.status(201).json({ message: "Viewed post saved" });
-            });
         });
     } catch (error) {
         console.error(error);
@@ -70,4 +68,40 @@ const postRecommended = (req, res) => {
     }
 }
 
-module.exports = { postViewed, postRecommended };
+function updateRecommended(viewed_post_id, res) {
+    const queryGetCommended = `SELECT commended FROM coursing.post WHERE post_id = ?;`;
+    db.query(queryGetCommended, [viewed_post_id], (err, result) => {
+        if (err) {
+            console.error("Error retrieving commended value:", err);
+            return res.status(500).json({ message: "Failed to retrieve commended value" });
+        }
+
+        const currentCommended = result[0].commended;
+        const updatedCommended = currentCommended + 1;
+
+        const query3 = `UPDATE coursing.post SET commended = ? WHERE post_id = ?;`;
+        db.query(query3, [updatedCommended, viewed_post_id], (err, result) => {
+            if (err) {
+                console.error("Error saving viewed post:", err);
+                return res.status(500).json({ message: "Failed to save viewed post" });
+            }
+            return res.status(201).json({ message: "Viewed post and commended value updated" });
+        });
+    })
+}
+
+const getRecommend = (req, res) => {
+    const { viewed_post_id, user_id } = req.query;
+
+    const query = `SELECT user_viewed.recommend FROM coursing.user_viewed WHERE _user_id = ? AND viewed_post_id = ?`
+    db.query(query, [user_id, viewed_post_id], (err, result) => {
+        if (err) {
+            console.error("Error get recommended post:", err);
+            return res.status(500).json({ message: "Failed to get recommended post" });
+        }
+
+        res.status(200).json({ recommend: result[0].recommend });
+    });
+}
+
+module.exports = { postViewed, postRecommended, getRecommend };

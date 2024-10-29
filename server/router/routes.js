@@ -3,7 +3,7 @@ const router = express.Router();
 const upload = require('../configs/uploadImgConfig');
 
 const {getPostList, getPostContent, postPost, uploadImg, uploadPostContent, delete_post} = require('../handlers/postHandler');
-const {getList, postList, deleteList, getTitle, getUserContentList} = require('../handlers/listHandler');
+const {getList, postList, deleteList, getTitle, getUserContentList, postNewTitle} = require('../handlers/listHandler');
 const {postLogin, postLogout, getLogged} = require('../handlers/authHandler');
 const getUCList = require('../handlers/user_categoryHandler');
 const {getPCList, postPC} = require('../handlers/post_categoryHandler');
@@ -14,7 +14,7 @@ const { getPlace } = require('../handlers/placeHandler');
 const { getReviews } = require('../handlers/reviewHandler');
 const {postChatRoom, postChatMessage, getChatRoom, getChatRooms, getChatMessage} = require('../handlers/chatHandler');
 const { getFollow, postFollowing } = require('../handlers/followHandler');
-const { postViewed, postRecommended } = require('../handlers/viewHandler');
+const { postViewed, postRecommended, getRecommend } = require('../handlers/viewHandler');
 
 router.get('/main', getPostList);
 router.get('/main_content', getPostContent);
@@ -32,6 +32,7 @@ router.post('/upload_post', postPost);
 router.post('/upload_PC', postPC);
 router.post('/fin_upload', uploadPostContent);
 router.delete('/delete_post', delete_post);
+router.post('/newTitle', postNewTitle);
 
 router.post('/upload_image', upload.single('image'), uploadImg);
 
@@ -55,6 +56,7 @@ router.get('/followList/:user_id', getFollow);
 router.post('/following', postFollowing);
 
 router.post('/viewedPost', postViewed);
-router.post('recommended', postRecommended);
+router.post('/recommmended', postRecommended);
+router.get('/getRecommend', getRecommend);
 
 module.exports = router;

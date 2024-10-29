@@ -35,6 +35,27 @@
     }
 }
 
+.newTitle_wrap {
+    width: 100%;
+}
+
+.newTitle {
+    width: 70%;
+    height: 25px;
+    margin: 3%;
+    box-sizing: border-box;
+}
+
+.newTitle_bt {
+    background-color: rgb(100, 149, 237);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 20%;
+    height: 25px;
+    box-sizing: border-box;
+}
+
 .each_hour {
     display: flex;
     flex-wrap: wrap;
@@ -74,4 +95,29 @@
 
 .each_hour:last-child {
     border-bottom: 1px solid black;
+}
+
+.button_wrap {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.new_plan {
+    color: white;
+    background-color: rgb(100, 149, 237);
+    padding: 2% 3%;
+    margin-right: 8%;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgb(100, 149, 237);
+}
+
+.plan_delete {
+    color: white;
+    background-color: rgb(100, 149, 237);
+    padding: 2% 3%;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgb(100, 149, 237);
 }

@@ -14,7 +14,7 @@ const PreviewPost = ({ content, setNewCon, onDeleteContent, onUploadPost, onhand
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [finState, setFinState] = useState(false);
     const { loading, userInfo } = useContext(AuthContext);
-
+console.log(content);
     const handleImgClick = (con) => {
         onhandleChangeInfo(con);
     }

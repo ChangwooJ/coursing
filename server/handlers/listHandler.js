@@ -87,4 +87,19 @@ const getTitle = (req, res) => {
     })
 }
 
-module.exports = { getList, postList, getUserContentList, deleteList, getTitle };
+const postNewTitle = (req, res) => {
+    const {_user_id, user_content_title} = req.body;
+
+    const query = `INSERT INTO coursing.user_content (_user_id, user_content_title) VALUES (?, ?);`;
+    
+    db.query(query, [_user_id, user_content_title], (err, result)=>{
+        if(err) {
+            res.status(500).send(err);
+            console.log(err);
+        } else {
+            res.status(200).json({ message: 'user_content added successfully' });
+        }
+    })
+}
+
+module.exports = { getList, postList, getUserContentList, deleteList, getTitle, postNewTitle };
