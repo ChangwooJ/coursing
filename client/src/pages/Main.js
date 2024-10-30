@@ -18,6 +18,8 @@ const Main = () => {
         fetchPostList();
     }, [dispatch]);
 
+    
+
     if (loading) {
         return <div>Loading...</div>;
     }

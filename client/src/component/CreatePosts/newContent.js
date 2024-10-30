@@ -87,7 +87,7 @@ const NewPost = ({ setNewCon, onSaveContent, clickedContent }) => {
                 content: text,
                 preview: preview,
                 address: loc[0].address_name,
-                cate_id: document.querySelector("select").selectedIndex,
+                cate_id: category,
                 start_time: startTime,
                 end_time: endTime,
                 name: place,

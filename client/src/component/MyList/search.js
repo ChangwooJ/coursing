@@ -33,6 +33,7 @@ const Search = ({ setResults, setClickPosition, setClickId, setContent, setShowP
 
         ps.keywordSearch(text, (data, status, pagination) => {
             if (status === window.kakao.maps.services.Status.OK) {
+                console.log(data);
                 setSearchResults(data);
                 setResults(data);
                 setPagination(pagination);

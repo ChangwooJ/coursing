@@ -36,14 +36,15 @@ const useFetchMaps = ({ content, onImgClick }) => {
                 const imgSrc = content[index]?.img_src || '/img/디테일 작성.png';
                 const isImg = imgSrc === '/img/디테일 작성.png';
                 const infoText = content[index]?.content;
+                console.log(infoText);
 
                 const contentDiv = document.createElement('div');
                 contentDiv.className = 'customoverlay';
 
                 const imgElement = document.createElement('img');
                 imgElement.src = imgSrc;
-                imgElement.style.width = '150px';
-                imgElement.style.height = '150px';
+                imgElement.style.width = '200px';
+                imgElement.style.height = '200px';
 
                 if(isImg) {
                     contentDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
@@ -55,9 +56,11 @@ const useFetchMaps = ({ content, onImgClick }) => {
                     imgElement.style.height = '30px';
                 }
 
+                contentDiv.appendChild(imgElement);
+
                 if (infoText) {
                     const textBox = document.createElement('div');
-                    textBox.className = 'text_box';
+                    textBox.className = 'text_box';               
                     textBox.innerHTML = infoText;
 
                     textBox.addEventListener('click', () => {
@@ -78,7 +81,6 @@ const useFetchMaps = ({ content, onImgClick }) => {
                     });
                 }
 
-                contentDiv.appendChild(imgElement);
 
                 const overlay = new kakao.maps.CustomOverlay({
                     content: contentDiv,
