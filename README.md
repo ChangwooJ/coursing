@@ -226,7 +226,7 @@ erDiagram
         int _place_id FK
         int user_id FK
         TEXT comment
-        DECIMAL(3,2) rating
+        float rating
         DATE date
     }
     review_img {
@@ -286,6 +286,3 @@ erDiagram
     place ||--o{ place_img : "has images"
     review ||--o{ review_img : "has images"
 
-
-
-1차 완료 : 10/14
